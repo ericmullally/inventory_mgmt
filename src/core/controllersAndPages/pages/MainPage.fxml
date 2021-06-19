@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="484.0" prefWidth="962.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllers.MainController">
+<VBox prefHeight="484.0" prefWidth="962.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.MainController">
    <children>
       <GridPane id="MainPage" prefHeight="486.0" prefWidth="962.0">
         <columnConstraints>
@@ -112,7 +112,8 @@
                         </TableView>
                      </content>
                   </ScrollPane>
-                  <Button id="products_add_btn" alignment="CENTER" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button id="products_add_btn" alignment="CENTER" mnemonicParsing="false" text="Add"
+                          GridPane.columnIndex="1" GridPane.rowIndex="3" onAction="#onAddProductClick"/>
                   <Button id="products_modify_btn" mnemonicParsing="false" text="Modify" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                   <Button id="products_delete_btn" alignment="CENTER" mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                </children>

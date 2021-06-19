@@ -1,4 +1,4 @@
 module:inventory.mgmt
 core
 core.classes
-core.controllers
+core.controllersAndPages
