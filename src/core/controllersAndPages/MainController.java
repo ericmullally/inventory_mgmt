@@ -3,6 +3,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -23,6 +24,7 @@ public class MainController {
             Stage partStage = new Stage();
             partStage.setScene(new Scene(root));
             partStage.setTitle("Add Part");
+            partStage.initModality(Modality.APPLICATION_MODAL);
             partStage.show();
     }
 
@@ -41,6 +43,7 @@ public class MainController {
         Stage productStage = new Stage();
         productStage.setScene(new Scene(root));
         productStage.setTitle("Add Product");
+        productStage.initModality(Modality.APPLICATION_MODAL);
         productStage.show();
     }
 }

@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.ProductController">
    <children>
@@ -49,22 +40,22 @@
             </Label>
             <Label id="add_product_id_label" text="ID" GridPane.rowIndex="2">
                <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </GridPane.margin>
             </Label>
             <Label id="add_product_name_label" text="Name" GridPane.rowIndex="3">
                <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </GridPane.margin>
             </Label>
             <Label id="add_product_inv_label" text="Inv" GridPane.rowIndex="4">
                <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </GridPane.margin>
             </Label>
             <Label id="add_product_price_label" text="Price" GridPane.rowIndex="5">
                <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </GridPane.margin>
             </Label>
             <TextField id="add_product_search_field" maxWidth="200.0" minWidth="100.0" promptText="Serach by Product ID or Name" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
@@ -74,10 +65,10 @@
             </TextField>
             <Label id="add_product_max_label" text="Max" GridPane.rowIndex="6">
                <GridPane.margin>
-                  <Insets left="10.0" />
+                  <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <TextField id="add_product_max_field" maxWidth="100.0" minWidth="50.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TextField id="add_product_max_field" maxWidth="150.0" minWidth="50.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -102,7 +93,7 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_product_min_field" maxWidth="100.0" minWidth="50.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
+            <TextField id="add_product_min_field" maxWidth="151.0" minWidth="50.0" prefHeight="25.0" prefWidth="151.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
