@@ -1,6 +1,7 @@
 
 package core;
 
+import core.classes.Inventory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

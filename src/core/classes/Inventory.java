@@ -10,12 +10,12 @@ public class Inventory {
   static Product[] Products = {};
 
 
-//  /**
-//   * could need params.
-//   */
-//  public Inventory(){
-//
-//  }
+  /**
+   * could need params.
+   */
+  public Inventory(){
+
+  }
 
   /**
    * @param newPart adds a new part to the inventory part list.
