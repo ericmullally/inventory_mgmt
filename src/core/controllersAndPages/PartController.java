@@ -1,10 +1,12 @@
 package core.controllersAndPages;
 
-import core.classes.Part;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 
 import java.text.MessageFormat;
 
@@ -13,23 +15,66 @@ import java.text.MessageFormat;
 /**
  * controller for the parts page.
  */
+
 public class PartController {
 
+
+    @FXML
+    private Label add_part_machine_label;
     @FXML
     private TextField add_part_name_field,add_part_inv_field,add_part_price_field,
-            add_part_max_field, add_part_min_field, add_part_machine_field;
+            add_part_max_field, add_part_min_field, add_part_machineId_field, add_part_company_name_field;
+    @FXML
+    private RadioButton in_house_btn,outsourced_btn;
+    @FXML
+    private GridPane add_part_grid;
+
+    @FXML
+    private void initialize(){
+        final ToggleGroup radioBtnGroup = new ToggleGroup();
+        in_house_btn.setToggleGroup(radioBtnGroup);
+        outsourced_btn.setToggleGroup(radioBtnGroup);
+
+        radioBtnGroup.selectedToggleProperty().addListener(radioChange);
+    }
+
+
+    private ChangeListener radioChange =  new ChangeListener<Toggle>() {
+        @Override
+        public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+            if(t1.equals(outsourced_btn)){
+                TextField addCompanyName = new TextField();
+                addCompanyName.setId("add_part_company_name_field");
+
+                add_part_machine_label.setText("Company Name");
+                add_part_grid.add(addCompanyName,1,6);
+                add_part_grid.getChildren().remove(add_part_machineId_field);
+
+            }else{
+                TextField addMachineId = new TextField();
+                addMachineId.setId("add_part_machineId_field");
+
+                add_part_machine_label.setText("Machine ID");
+                add_part_grid.add(addMachineId, 1,6);
+                add_part_grid.getChildren().remove(add_part_company_name_field);
+            }
+        }
+    };
 
     @FXML
     public void onSavePartClick(ActionEvent actionEvent) {
 
         boolean isComplete= checkFields();
+
         if(isComplete){
             if(checkValidInput()){
-                //               Part newPart =  new Part(, );
+
             }
         }
 
     }
+
+
 
     /**
      * @return true if all fields are filled, else false.
@@ -38,14 +83,14 @@ public class PartController {
      * Shows an alert identifying the first found empty field, if necessary.
      */
     private boolean checkFields(){
-        TextField[] fields = {add_part_name_field,  add_part_inv_field, add_part_price_field,
-                add_part_machine_field, add_part_max_field, add_part_min_field };
+         TextField[] fields = {add_part_name_field,  add_part_inv_field, add_part_price_field, add_part_max_field,
+                add_part_min_field, outsourced_btn.isSelected() ? add_part_company_name_field : add_part_machineId_field };
 
         for(TextField field : fields){
             if(field.getText().isEmpty()){
 
                 String[] fieldNameList = field.getId().split("_");
-                String fieldName = "Part " + fieldNameList[fieldNameList.length -2];
+                String fieldName = "Part " + field.getId() == "add_part_company_name_field" ? "Company Name": fieldNameList[fieldNameList.length -2];
                 String information = MessageFormat.format("The following Field is empty: {0}", fieldName);
 
                 Alert errorMsg = new Alert(Alert.AlertType.ERROR);
@@ -66,35 +111,90 @@ public class PartController {
      * Shows an alert identifying the effected field.
      */
     private boolean checkValidInput(){
-        TextField[] fieldsToCheck = { add_part_inv_field, add_part_price_field, add_part_machine_field,
-                add_part_max_field, add_part_min_field };
+        TextField[] fieldsToCheck = { add_part_inv_field, add_part_price_field, add_part_max_field,
+                add_part_min_field};
+        int min = 0;
+        int max = 0;
 
         for(TextField field : fieldsToCheck){
-            if(field == add_part_price_field){
-                try {
-                    Float.parseFloat(add_part_price_field.getText().strip());
-                }catch (Exception ex){
-                    Alert errorMsg = new Alert(Alert.AlertType.ERROR);
-                    errorMsg.setHeaderText("Price Invalid");
-                    errorMsg.setContentText("Please enter a valid price.");
-                    errorMsg.show();
-                    return false;
-                }
-            }else{
-                try {
-                    Integer.parseInt(field.getText().strip());
-                }catch(Exception ex){
-                    String[] fieldNameList = field.getId().split("_");
-                    String fieldName = fieldNameList[fieldNameList.length -2];
-                    String information = MessageFormat.format("Part {0} requires a number value.", fieldName);
+            switch (field.getId()) {
 
-                    Alert errorMsg = new Alert(Alert.AlertType.ERROR);
-                    errorMsg.setHeaderText("Invalid Input");
-                    errorMsg.setContentText(information);
-                    errorMsg.show();
-                    return false;
-                }
+                case "add_part_inv_field":
+                    try {
+                        Integer.parseInt(field.getText().strip());
+                    } catch (Exception ex) {
+                        Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+                        errorMsg.setHeaderText("Invalid Input");
+                        errorMsg.setContentText("An integer value is required for inventory section.");
+                        errorMsg.show();
+                        return false;
+                    }
+                    break;
+
+                case "add_part_price_field":
+                    try {
+                        Float.parseFloat(field.getText().strip());
+                    } catch (Exception ex) {
+                        Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+                        errorMsg.setHeaderText("Price Invalid");
+                        errorMsg.setContentText("Please enter a valid price.");
+                        errorMsg.show();
+                        return false;
+                    }
+                    break;
+
+                case "add_part_max_field":
+                    try{
+                        int val =Integer.parseInt(field.getText().strip());
+                        max = val;
+                    }catch(Exception ex){
+                        Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+                        errorMsg.setHeaderText("Maximum Value Invalid");
+                        errorMsg.setContentText("Please enter an integer value for maximum inventory.");
+                        errorMsg.show();
+                        return false;
+                    }
+                    break;
+
+                case "add_part_min_field":
+                    try{
+                       int val = Integer.parseInt(field.getText().strip());
+                       min = val;
+                    }catch(Exception ex){
+                        Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+                        errorMsg.setHeaderText("Minimum Value Invalid");
+                        errorMsg.setContentText("Please enter an integer value for minimum inventory.");
+                        errorMsg.show();
+                        return false;
+                    }
+                    break;
+
+                case "add_part_machineID_field":
+                    try{
+                        Integer.parseInt(field.getText().strip());
+                    }catch(Exception ex){
+                        Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+                        errorMsg.setHeaderText("Minimum Value Invalid");
+                        errorMsg.setContentText("Please enter an integer value for minimum inventory.");
+                        errorMsg.show();
+                        return false;
+                    }
+                    break;
+
+                default:
+                    break;
+
             }
+
+            }
+
+
+        if(min > max){
+            Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+            errorMsg.setHeaderText("Invalid Input");
+            errorMsg.setContentText("The minimum number of part should be less than the maximum.");
+            errorMsg.show();
+            return false;
         }
         return true;
     }
