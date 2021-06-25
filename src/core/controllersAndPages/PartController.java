@@ -62,11 +62,18 @@ public class PartController {
     }
 
 
+    /**
+     *
+     * @param actionEvent is unused.
+     * @throws IOException
+     * Creates new part class outsourced or inhouse depending on current selection.
+     * Creates new main page and gives it thee new inventory object with the new part.
+     */
     @FXML
     public void onSavePartClick (ActionEvent actionEvent) throws IOException {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
-        MainController mainController = mainLoader.getController();
         Parent root = mainLoader.load();
+        MainController mainController = mainLoader.getController();
         Inventory newInventory = new Inventory();
 
         boolean isComplete= checkFields();
@@ -115,8 +122,6 @@ public class PartController {
         Stage currentStage = (Stage) add_part_cancel_btn.getScene().getWindow();
         currentStage.close();
     }
-
-
 
 
     /**

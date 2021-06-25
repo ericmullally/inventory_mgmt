@@ -22,7 +22,7 @@ public class MainController {
 
     @FXML
     public void initialize(Inventory inventory1){
-
+    System.out.println(inventory1);
     }
 
     @FXML
