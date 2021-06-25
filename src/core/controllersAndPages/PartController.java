@@ -6,8 +6,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-
 import java.text.MessageFormat;
 
 
@@ -18,48 +16,36 @@ import java.text.MessageFormat;
 
 public class PartController {
 
-
     @FXML
     private Label add_part_machine_label;
-    @FXML
-    private TextField add_part_name_field,add_part_inv_field,add_part_price_field,
-            add_part_max_field, add_part_min_field, add_part_machineId_field, add_part_company_name_field;
-    @FXML
-    private RadioButton in_house_btn,outsourced_btn;
-    @FXML
-    private GridPane add_part_grid;
 
     @FXML
-    private void initialize(){
+    private TextField add_part_name_field,add_part_inv_field,add_part_price_field,
+            add_part_max_field, add_part_min_field, add_part_id_or_company_field;
+
+    @FXML
+    private RadioButton in_house_btn,outsourced_btn;
+
+    @FXML
+    public void initialize(){
         final ToggleGroup radioBtnGroup = new ToggleGroup();
         in_house_btn.setToggleGroup(radioBtnGroup);
         outsourced_btn.setToggleGroup(radioBtnGroup);
+        radioBtnGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                if (t1 == outsourced_btn) {
+                    add_part_machine_label.setText("Company Name");
+                } else {
+                    add_part_machine_label.setText("Machine ID");
+                }
+            }
+        });
 
-        radioBtnGroup.selectedToggleProperty().addListener(radioChange);
     }
 
 
-    private ChangeListener radioChange =  new ChangeListener<Toggle>() {
-        @Override
-        public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-            if(t1.equals(outsourced_btn)){
-                TextField addCompanyName = new TextField();
-                addCompanyName.setId("add_part_company_name_field");
 
-                add_part_machine_label.setText("Company Name");
-                add_part_grid.add(addCompanyName,1,6);
-                add_part_grid.getChildren().remove(add_part_machineId_field);
-
-            }else{
-                TextField addMachineId = new TextField();
-                addMachineId.setId("add_part_machineId_field");
-
-                add_part_machine_label.setText("Machine ID");
-                add_part_grid.add(addMachineId, 1,6);
-                add_part_grid.getChildren().remove(add_part_company_name_field);
-            }
-        }
-    };
 
     @FXML
     public void onSavePartClick(ActionEvent actionEvent) {
@@ -83,8 +69,9 @@ public class PartController {
      * Shows an alert identifying the first found empty field, if necessary.
      */
     private boolean checkFields(){
-         TextField[] fields = {add_part_name_field,  add_part_inv_field, add_part_price_field, add_part_max_field,
-                add_part_min_field, outsourced_btn.isSelected() ? add_part_company_name_field : add_part_machineId_field };
+
+        TextField[] fields = {add_part_name_field,  add_part_inv_field, add_part_price_field, add_part_max_field,
+                add_part_min_field, add_part_id_or_company_field};
 
         for(TextField field : fields){
             if(field.getText().isEmpty()){
@@ -112,7 +99,7 @@ public class PartController {
      */
     private boolean checkValidInput(){
         TextField[] fieldsToCheck = { add_part_inv_field, add_part_price_field, add_part_max_field,
-                add_part_min_field};
+                add_part_min_field, add_part_id_or_company_field};
         int min = 0;
         int max = 0;
 
@@ -169,20 +156,26 @@ public class PartController {
                     }
                     break;
 
-                case "add_part_machineID_field":
-                    try{
-                        Integer.parseInt(field.getText().strip());
-                    }catch(Exception ex){
-                        Alert errorMsg = new Alert(Alert.AlertType.ERROR);
-                        errorMsg.setHeaderText("Minimum Value Invalid");
-                        errorMsg.setContentText("Please enter an integer value for minimum inventory.");
-                        errorMsg.show();
-                        return false;
+                case "add_part_id_or_company_field":
+                    if(outsourced_btn.isSelected()){
+                        // working here
+                    }else{
+                        try{
+                            Integer.parseInt(field.getText().strip());
+                        }catch(Exception ex){
+                            Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+                            errorMsg.setHeaderText("Minimum Value Invalid");
+                            errorMsg.setContentText("Please enter an integer value for minimum inventory.");
+                            errorMsg.show();
+                            return false;
+                        }
+                        break;
                     }
-                    break;
+
 
                 default:
-                    break;
+                    System.out.println("You have made a mistake in part controller check valid input.");
+                    return false;
 
             }
 

@@ -64,7 +64,7 @@
                   <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <Label id="add_part_machin_label" fx:id="add_part_machine_label" prefHeight="17.0" prefWidth="89.0" text="Machine ID" GridPane.halignment="LEFT" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="6">
+            <Label id="add_part_machine_label" fx:id="add_part_machine_label" prefHeight="17.0" prefWidth="89.0" text="Machine ID" GridPane.halignment="LEFT" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
@@ -94,7 +94,7 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_part_machine_field" fx:id="add_part_machineId_field" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TextField id="add_part_id_or_company_field" fx:id="add_part_id_or_company_field" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
