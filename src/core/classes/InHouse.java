@@ -3,18 +3,18 @@ package core.classes;
 
 
 public class InHouse extends Part{
-    int machinedId = 0;
-
-    public InHouse(int id, String name, double price, int stock, int min, int max) {
+    int machineId = -1;
+    public InHouse(int id, String name, double price, int stock, int min, int max, int machineId) {
      super(id, name, price, stock, min, max);
+     this.machineId = machineId;
     }
 
     public void setMachinedId(int id){
-        this.machinedId = id;
+        this.machineId = id;
     }
 
     public int getMachinedId (){
-        return this.machinedId;
+        return this.machineId;
     }
 
 }

@@ -1,11 +1,20 @@
 package core.controllersAndPages;
 
-
+import core.classes.InHouse;
+import core.classes.Inventory;
+import core.classes.Outsourced;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.text.MessageFormat;
 
 
@@ -27,6 +36,14 @@ public class PartController {
     private RadioButton in_house_btn,outsourced_btn;
 
     @FXML
+    private Button add_part_save_btn, add_part_cancel_btn;
+
+    int Id = 01;
+
+    /**
+     * Sets toggle buttonGroup, and adds event listener.
+     */
+    @FXML
     public void initialize(){
         final ToggleGroup radioBtnGroup = new ToggleGroup();
         in_house_btn.setToggleGroup(radioBtnGroup);
@@ -45,20 +62,60 @@ public class PartController {
     }
 
 
-
-
     @FXML
-    public void onSavePartClick(ActionEvent actionEvent) {
+    public void onSavePartClick (ActionEvent actionEvent) throws IOException {
+        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+        MainController mainController = mainLoader.getController();
+        Parent root = mainLoader.load();
+        Inventory newInventory = new Inventory();
 
         boolean isComplete= checkFields();
+        boolean isValid =  checkValidInput();
 
-        if(isComplete){
-            if(checkValidInput()){
+        if(isComplete && isValid){
+           String name = add_part_name_field.getText();
+           int inv = Integer.parseInt(add_part_inv_field.getText().strip());
+           double price = Double.parseDouble(add_part_price_field.getText().strip());
+           int max = Integer.parseInt(add_part_max_field.getText().strip());
+           int min = Integer.parseInt(add_part_min_field.getText().strip());
 
-            }
+           if(outsourced_btn.isSelected()){
+               String machineIdOrName = add_part_id_or_company_field.getText();
+               Outsourced newPart = new Outsourced(Id, name,  price, inv, max, min, machineIdOrName);
+
+               newInventory.addPart(newPart);
+           }else{
+               int machineIdOrName = Integer.parseInt(add_part_id_or_company_field.getText());
+               InHouse newPart = new InHouse(Id, name,  price, inv, max, min, machineIdOrName);
+               newInventory.addPart(newPart);
+           }
+            mainController.initialize(newInventory);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Inventory Management System");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+
+            Stage currentStage = (Stage) add_part_save_btn.getScene().getWindow();
+            currentStage.close();
+
+
         }
 
     }
+
+    @FXML
+    public void onCancelClick(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("pages/MainPage.fxml"));
+        Stage mainStage = new Stage();
+        mainStage.setScene(new Scene(root));
+        mainStage.setTitle("Add Part");
+        mainStage.initModality(Modality.APPLICATION_MODAL);
+        mainStage.show();
+
+        Stage currentStage = (Stage) add_part_cancel_btn.getScene().getWindow();
+        currentStage.close();
+    }
+
 
 
 
@@ -102,13 +159,14 @@ public class PartController {
                 add_part_min_field, add_part_id_or_company_field};
         int min = 0;
         int max = 0;
+        int inventory = 0;
 
         for(TextField field : fieldsToCheck){
             switch (field.getId()) {
 
                 case "add_part_inv_field":
                     try {
-                        Integer.parseInt(field.getText().strip());
+                       inventory = Integer.parseInt(field.getText().strip());
                     } catch (Exception ex) {
                         Alert errorMsg = new Alert(Alert.AlertType.ERROR);
                         errorMsg.setHeaderText("Invalid Input");
@@ -120,7 +178,7 @@ public class PartController {
 
                 case "add_part_price_field":
                     try {
-                        Float.parseFloat(field.getText().strip());
+                        Double.parseDouble(field.getText().strip());
                     } catch (Exception ex) {
                         Alert errorMsg = new Alert(Alert.AlertType.ERROR);
                         errorMsg.setHeaderText("Price Invalid");
@@ -132,8 +190,7 @@ public class PartController {
 
                 case "add_part_max_field":
                     try{
-                        int val =Integer.parseInt(field.getText().strip());
-                        max = val;
+                        max = Integer.parseInt(field.getText().strip());
                     }catch(Exception ex){
                         Alert errorMsg = new Alert(Alert.AlertType.ERROR);
                         errorMsg.setHeaderText("Maximum Value Invalid");
@@ -145,8 +202,7 @@ public class PartController {
 
                 case "add_part_min_field":
                     try{
-                       int val = Integer.parseInt(field.getText().strip());
-                       min = val;
+                        min = Integer.parseInt(field.getText().strip());
                     }catch(Exception ex){
                         Alert errorMsg = new Alert(Alert.AlertType.ERROR);
                         errorMsg.setHeaderText("Minimum Value Invalid");
@@ -157,21 +213,18 @@ public class PartController {
                     break;
 
                 case "add_part_id_or_company_field":
-                    if(outsourced_btn.isSelected()){
-                        // working here
-                    }else{
+                    if(in_house_btn.isSelected()){
                         try{
                             Integer.parseInt(field.getText().strip());
                         }catch(Exception ex){
                             Alert errorMsg = new Alert(Alert.AlertType.ERROR);
-                            errorMsg.setHeaderText("Minimum Value Invalid");
-                            errorMsg.setContentText("Please enter an integer value for minimum inventory.");
+                            errorMsg.setHeaderText("Machine Id invalid");
+                            errorMsg.setContentText("Machine Id is an integer value.");
                             errorMsg.show();
                             return false;
                         }
                         break;
                     }
-
 
                 default:
                     System.out.println("You have made a mistake in part controller check valid input.");
@@ -189,6 +242,19 @@ public class PartController {
             errorMsg.show();
             return false;
         }
+
+        if(inventory < min || inventory > max){
+            boolean underInv = inventory < min;
+            String overUnder = underInv ? "Less Than Min" : "Greater Than Max";
+
+            String info = String.format("Inventory is %s",overUnder );
+            Alert errorMsg = new Alert(Alert.AlertType.ERROR);
+            errorMsg.setHeaderText("Invalid Input");
+            errorMsg.setContentText(info);
+            errorMsg.show();
+            return false;
+        }
+
         return true;
     }
 }

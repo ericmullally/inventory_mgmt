@@ -1,7 +1,6 @@
 
 package core;
 
-import core.classes.Inventory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +16,7 @@ public class Main extends Application {
         primaryStage.setTitle("Inventory Management System");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
     }
 
 

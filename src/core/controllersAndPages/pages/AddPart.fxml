@@ -105,7 +105,7 @@
                </GridPane.margin>
             </TextField>
             <Button id="add_part_save_btn" fx:id="add_part_save_btn" mnemonicParsing="false" onAction="#onSavePartClick" text="Save" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-            <Button id="add_part_cancel_btn" fx:id="add_part_cancel_btn" mnemonicParsing="false" text="Cancel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+            <Button id="add_part_cancel_btn" fx:id="add_part_cancel_btn" mnemonicParsing="false" onAction="#onCancelClick" text="Cancel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
             <Label id="add_part_min_label" fx:id="add_part_min_label" text="Min" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets right="10.0" />

@@ -2,9 +2,12 @@ package core.controllersAndPages;
 
 import core.classes.Inventory;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -14,10 +17,23 @@ public class MainController {
 
     Inventory inventory = new Inventory();
 
+    @FXML
+    Button main_add_part_btn;
+
+    @FXML
+    public void initialize(Inventory inventory1){
+
+    }
+
+    @FXML
+    public void initialize(){
+
+    }
 
     /**
      ****************************************************************** this section is for the part controls
      */
+
 
     /**
      * @param actionEvent
@@ -34,7 +50,11 @@ public class MainController {
             partStage.initModality(Modality.APPLICATION_MODAL);
             partStage.show();
 
+            Stage currentStage = (Stage)main_add_part_btn.getScene().getWindow();
+            currentStage.hide();
+
     }
+
 
     /**
      ****************************************************************** this section is for the product controls
