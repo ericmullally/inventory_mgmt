@@ -1,13 +1,11 @@
 package core.classes;
 
-
-
-
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Inventory {
-  static Part[] Parts = {};
-  static Product[] Products = {};
+  private ObservableList<Part> allParts = FXCollections.observableArrayList();
+  private ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
 
   /**
@@ -20,22 +18,22 @@ public class Inventory {
   /**
    * @param newPart adds a new part to the inventory part list.
    */
-  public static void addPart(Part newPart){
-
+  public void addPart(Part newPart){
+    this.allParts.add(newPart);
   }
 
   /**
    * @param newProduct adds a new product to the inventory product list.
    */
-  public static void addProduct(Product newProduct){
-
+  public void addProduct(Product newProduct){
+    this.allProducts.add(newProduct);
   }
 
   /**
    * @param partId looks up a part in the inventory by it's ID.
    * @return a Part object if a matching ID is found.
    */
-//  public static Part lookUpPart(int partId){
+//  public Part lookUpPart(int partId){
 //
 //  }
 
@@ -43,7 +41,7 @@ public class Inventory {
    * @param partName looks up a part in the inventory by it's Name.
    * @return a list of matching parts. name may be partial.
    */
-//  public static Part[] lookUpPart(String partName){
+//  public Part[] lookUpPart(String partName){
 //
 //  }
 
@@ -51,7 +49,7 @@ public class Inventory {
    * @param productId looks up a product in the inventory by it's ID.
    * @return a Product object if a matching ID is found.
    */
-//  public static Product lookUpProduct(int productId){
+//  public Product lookUpProduct(int productId){
 //
 //  }
 
@@ -59,7 +57,7 @@ public class Inventory {
    * @param productName looks up a product in the inventory by it's Name.
    * @return a list of matching products. name may be partial.
    */
-//  public static Product lookUpProduct(String productName){
+//  public Product lookUpProduct(String productName){
 //
 //  }
 
@@ -68,7 +66,7 @@ public class Inventory {
    * @param part Part Object to replace the old version.
    * finds and replaces an existing part in the part list.
    */
-  public static void updatePart(int index, Part part){
+  public void updatePart(int index, Part part){
 
   }
 
@@ -77,7 +75,7 @@ public class Inventory {
    * @param product Product Object to replace the old version.
    * finds and replaces an existing Product in the Product list.
    */
-  public static void updateProduct(int index, Product product){
+  public void updateProduct(int index, Product product){
 
   }
 
@@ -85,29 +83,29 @@ public class Inventory {
    * @param part Part object to be removed.
    * @return true if part was found and successfully removed, false otherwise.
    */
-  public static boolean deletePart(Part part){
+  public boolean deletePart(Part part){
     return true;
   }
   /**
    * @param product Product object to be removed.
    * @return true if product was found and successfully removed, false otherwise.
    */
-  public static boolean deleteProduct(Product product){
+  public boolean deleteProduct(Product product){
     return true;
   }
 
   /**
    * @return the Parts list.
    */
-  public static Part[] getAllParts(){
-    return Parts;
+  public  ObservableList<Part> getAllParts(){
+    return allParts;
   }
 
   /**
    * @return the product list.
    */
-  public static Product[] getAllProducts(){
-    return Products;
+  public ObservableList<Product> getAllProducts(){
+    return allProducts;
   }
 
 }

@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.text.MessageFormat;
 
@@ -30,7 +29,7 @@ public class PartController {
 
     @FXML
     private TextField add_part_name_field,add_part_inv_field,add_part_price_field,
-            add_part_max_field, add_part_min_field, add_part_id_or_company_field;
+            add_part_max_field, add_part_min_field, add_part_id_or_company_field, add_part_id_field;
 
     @FXML
     private RadioButton in_house_btn,outsourced_btn;
@@ -38,13 +37,18 @@ public class PartController {
     @FXML
     private Button add_part_save_btn, add_part_cancel_btn;
 
-    int Id = 01;
+    Inventory inventory;
+    int Id = -1;
 
     /**
      * Sets toggle buttonGroup, and adds event listener.
      */
     @FXML
-    public void initialize(){
+    public void initialize(Inventory inventory){
+        this.inventory = inventory;
+        Id = inventory.getAllParts().size() + 1 ;
+        add_part_id_field.setText(String.valueOf(Id));
+
         final ToggleGroup radioBtnGroup = new ToggleGroup();
         in_house_btn.setToggleGroup(radioBtnGroup);
         outsourced_btn.setToggleGroup(radioBtnGroup);
@@ -58,9 +62,7 @@ public class PartController {
                 }
             }
         });
-
     }
-
 
     /**
      *
@@ -74,7 +76,6 @@ public class PartController {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
         Parent root = mainLoader.load();
         MainController mainController = mainLoader.getController();
-        Inventory newInventory = new Inventory();
 
         boolean isComplete= checkFields();
         boolean isValid =  checkValidInput();
@@ -90,13 +91,13 @@ public class PartController {
                String machineIdOrName = add_part_id_or_company_field.getText();
                Outsourced newPart = new Outsourced(Id, name,  price, inv, max, min, machineIdOrName);
 
-               newInventory.addPart(newPart);
+               this.inventory.addPart(newPart);
            }else{
                int machineIdOrName = Integer.parseInt(add_part_id_or_company_field.getText());
                InHouse newPart = new InHouse(Id, name,  price, inv, max, min, machineIdOrName);
-               newInventory.addPart(newPart);
+               this.inventory.addPart(newPart);
            }
-            mainController.initialize(newInventory);
+            mainController.initialize(this.inventory);
             Stage primaryStage = new Stage();
             primaryStage.setTitle("Inventory Management System");
             primaryStage.setScene(new Scene(root));
@@ -104,8 +105,6 @@ public class PartController {
 
             Stage currentStage = (Stage) add_part_save_btn.getScene().getWindow();
             currentStage.close();
-
-
         }
 
     }
@@ -122,7 +121,6 @@ public class PartController {
         Stage currentStage = (Stage) add_part_cancel_btn.getScene().getWindow();
         currentStage.close();
     }
-
 
     /**
      * @return true if all fields are filled, else false.
@@ -228,8 +226,8 @@ public class PartController {
                             errorMsg.show();
                             return false;
                         }
-                        break;
                     }
+                    break;
 
                 default:
                     System.out.println("You have made a mistake in part controller check valid input.");

@@ -15,19 +15,20 @@ import java.io.IOException;
 
 public class MainController {
 
-    Inventory inventory = new Inventory();
+    Inventory inventory;
 
     @FXML
     Button main_add_part_btn;
 
     @FXML
     public void initialize(Inventory inventory1){
-    System.out.println(inventory1);
+        this.inventory = inventory1;
+        System.out.println(inventory1);
     }
 
     @FXML
     public void initialize(){
-
+        this.inventory = new Inventory();
     }
 
     /**
@@ -43,11 +44,16 @@ public class MainController {
      */
     public void onAddPartClick(ActionEvent actionEvent) throws IOException {
 
-            Parent root = FXMLLoader.load(getClass().getResource("pages/AddPart.fxml"));
+            FXMLLoader addPartLoader = new FXMLLoader(getClass().getResource("pages/AddPart.fxml"));
+            Parent root = addPartLoader.load();
+            PartController addPartController = addPartLoader.getController();
+            addPartController.initialize(inventory);
+
             Stage partStage = new Stage();
             partStage.setScene(new Scene(root));
             partStage.setTitle("Add Part");
             partStage.initModality(Modality.APPLICATION_MODAL);
+
             partStage.show();
 
             Stage currentStage = (Stage)main_add_part_btn.getScene().getWindow();
