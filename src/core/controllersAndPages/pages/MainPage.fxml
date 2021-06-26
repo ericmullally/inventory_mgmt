@@ -20,7 +20,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <GridPane id="parts_view" style="-fx-border-color: black; -fx-border-radius: 10;" GridPane.rowIndex="1" GridPane.rowSpan="3">
+            <GridPane id="parts_view" fx:id="part_grid_pane" style="-fx-border-color: black; -fx-border-radius: 10;" GridPane.rowIndex="1" GridPane.rowSpan="3">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,7 +45,7 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField id="parts_search_field" promptText="Search by Part ID or Name" GridPane.columnIndex="2" GridPane.columnSpan="2">
+                  <TextField id="parts_search_field" fx:id="part_search_box" promptText="Search by Part ID or Name" GridPane.columnIndex="2" GridPane.columnSpan="2">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
@@ -55,19 +55,19 @@
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                      <content>
-                        <TableView id="parts_table" prefHeight="167.0" prefWidth="416.0">
+                        <TableView id="parts_table" fx:id="main_parts_table_view" prefHeight="167.0" prefWidth="416.0">
                           <columns>
-                            <TableColumn id="part_id_col" prefWidth="75.0" text="Part ID" />
-                            <TableColumn id="part_name_col" prefWidth="90.0" text="Part Name" />
-                              <TableColumn id="part_inventory_lvl_col" prefWidth="100.0" text="Inventory Level" />
-                              <TableColumn id="part_cost_col" prefWidth="150.0" text="Price / Cost Per Unit" />
+                            <TableColumn id="part_id_col" fx:id="part_id_col" prefWidth="75.0" text="Part ID" />
+                            <TableColumn id="part_name_col" fx:id="part_name_col" prefWidth="90.0" text="Part Name" />
+                              <TableColumn id="part_inventory_lvl_col" fx:id="part_inventory_col" prefWidth="100.0" text="Inventory Level" />
+                              <TableColumn id="part_cost_col" fx:id="part_price_col" prefWidth="150.0" text="Price / Cost Per Unit" />
                           </columns>
                         </TableView>
                      </content>
                   </ScrollPane>
                   <Button id="parts_add_btn" fx:id="main_add_part_btn" alignment="CENTER" mnemonicParsing="false" onAction="#onAddPartClick" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Button id="parts_modify_btn" mnemonicParsing="false" text="Modify" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Button id="parts_delete_btn" alignment="CENTER" mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Button id="parts_modify_btn" fx:id="part_modify_btn" mnemonicParsing="false" text="Modify" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Button id="parts_delete_btn" fx:id="part_delete_btn" alignment="CENTER" mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <GridPane id="parts_view" layoutX="20.0" layoutY="101.0" style="-fx-border-color: black; -fx-border-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="3">
@@ -92,7 +92,7 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField id="products_search_field" promptText="Search by Product ID or Name" GridPane.columnIndex="2" GridPane.columnSpan="2">
+                  <TextField id="products_search_field" fx:id="product_search_box" promptText="Search by Product ID or Name" GridPane.columnIndex="2" GridPane.columnSpan="2">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
@@ -102,22 +102,22 @@
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                      <content>
-                        <TableView id="product_table" prefHeight="164.0" prefWidth="449.0">
+                        <TableView id="product_table" fx:id="main_product_table_view" prefHeight="164.0" prefWidth="449.0">
                            <columns>
-                              <TableColumn id="product_id_col" prefWidth="75.0" text="Product ID" />
-                              <TableColumn id="product_name_col" prefWidth="90.0" text="Product Name" />
-                              <TableColumn id="product_inventory_lvl_col" prefWidth="123.0" text="Inventory Level" />
-                              <TableColumn id="product_cost_col" prefWidth="160.0" text="Price / Cost Per Unit" />
+                              <TableColumn id="product_id_col" fx:id="product_id_col" prefWidth="75.0" text="Product ID" />
+                              <TableColumn id="product_name_col" fx:id="product_name_col" prefWidth="90.0" text="Product Name" />
+                              <TableColumn id="product_inventory_lvl_col" fx:id="product_inventory_col" prefWidth="123.0" text="Inventory Level" />
+                              <TableColumn id="product_cost_col" fx:id="product_price_col" prefWidth="160.0" text="Price / Cost Per Unit" />
                            </columns>
                         </TableView>
                      </content>
                   </ScrollPane>
-                  <Button id="products_add_btn" alignment="CENTER" mnemonicParsing="false" onAction="#onAddProductClick" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Button id="products_modify_btn" mnemonicParsing="false" text="Modify" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Button id="products_delete_btn" alignment="CENTER" mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Button id="products_add_btn" fx:id="product_add_btn" alignment="CENTER" mnemonicParsing="false" onAction="#onAddProductClick" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button id="products_modify_btn" fx:id="product_modify_btn" mnemonicParsing="false" text="Modify" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Button id="products_delete_btn" fx:id="product_delete_btn" alignment="CENTER" mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                </children>
             </GridPane>
-            <Button id="main_exit_btn" mnemonicParsing="false" prefHeight="22.0" prefWidth="111.0" text="Exit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+            <Button id="main_exit_btn" fx:id="main_exit_btn" mnemonicParsing="false" prefHeight="22.0" prefWidth="111.0" text="Exit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

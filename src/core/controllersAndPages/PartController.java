@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 
@@ -23,6 +25,8 @@ import java.text.MessageFormat;
  */
 
 public class PartController {
+    Inventory inventory;
+    int Id = -1;
 
     @FXML
     private Label add_part_machine_label;
@@ -37,11 +41,10 @@ public class PartController {
     @FXML
     private Button add_part_save_btn, add_part_cancel_btn;
 
-    Inventory inventory;
-    int Id = -1;
 
     /**
      * Sets toggle buttonGroup, and adds event listener.
+     * creates part Id.
      */
     @FXML
     public void initialize(Inventory inventory){
@@ -109,13 +112,19 @@ public class PartController {
 
     }
 
+    /**
+     *
+     * @param actionEvent is unused.
+     * @throws IOException
+     * Exits add part window, and redirects back to main.
+     * does not save current part.
+     */
     @FXML
     public void onCancelClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("pages/MainPage.fxml"));
         Stage mainStage = new Stage();
         mainStage.setScene(new Scene(root));
-        mainStage.setTitle("Add Part");
-        mainStage.initModality(Modality.APPLICATION_MODAL);
+        mainStage.setTitle("Inventory Management System");
         mainStage.show();
 
         Stage currentStage = (Stage) add_part_cancel_btn.getScene().getWindow();
@@ -260,4 +269,5 @@ public class PartController {
 
         return true;
     }
+
 }
