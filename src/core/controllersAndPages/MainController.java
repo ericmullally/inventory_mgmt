@@ -2,6 +2,9 @@ package core.controllersAndPages;
 
 import core.classes.Inventory;
 import core.classes.Part;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +20,13 @@ import java.io.IOException;
 
 
 public class MainController {
+    /**
+     * todo section
+     * on first initialize create a few products and parts.
+     * add products to the table on init.
+     * part double value needs two decimal places
+     * part cancel button needs to send the current inventory back.
+     */
 
     private Inventory inventory;
 
@@ -34,7 +44,6 @@ public class MainController {
     @FXML
     private TableColumn<Part, Double> part_price_col;
 
-
     @FXML
     public void initialize(Inventory inventory1){
         this.inventory = inventory1;
@@ -48,18 +57,13 @@ public class MainController {
      * populates the tables in the main view.
      */
     private void populateDisplay(){
+        part_id_col.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
+        part_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        part_inventory_col.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
+        part_price_col.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
 
-        part_id_col.setCellValueFactory(new PropertyValueFactory<>("id"));
-        part_name_col.setCellValueFactory(new PropertyValueFactory<>("name"));
-        part_inventory_col.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        part_price_col.setCellValueFactory(new PropertyValueFactory<>("price"));
         main_parts_table_view.setItems( inventory.getAllParts());
     };
-
-    /**
-     ****************************************************************** this section is for the part controls
-     */
-
 
     /**
      * @param actionEvent
@@ -88,10 +92,6 @@ public class MainController {
 
     }
 
-
-    /**
-     ****************************************************************** this section is for the product controls
-     */
 
     /**
      * @param actionEvent

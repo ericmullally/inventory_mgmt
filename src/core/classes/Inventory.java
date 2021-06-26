@@ -86,6 +86,7 @@ public class Inventory {
   public boolean deletePart(Part part){
     return true;
   }
+
   /**
    * @param product Product object to be removed.
    * @return true if product was found and successfully removed, false otherwise.
