@@ -102,10 +102,10 @@
                <content>
                   <TableView id="add_product_parts_selection_table" fx:id="add_product_parts_selection_table" prefHeight="173.0" prefWidth="477.0">
                     <columns>
-                      <TableColumn id="add_product_p_id_col" prefWidth="75.0" text="Part ID" />
-                      <TableColumn id="add_product_p_Name_col" prefWidth="115.0" text="Part Name" />
-                        <TableColumn id="add_product_p_inv_col" prefWidth="114.0" text="Inventory Level" />
-                        <TableColumn id="add_product_p_price_col" prefWidth="165.0" text="Price / Cost per unit" />
+                      <TableColumn id="add_product_p_id_col" fx:id="part_selection_id" prefWidth="75.0" text="Part ID" />
+                      <TableColumn id="add_product_p_Name_col" fx:id="part_selection_name" prefWidth="115.0" text="Part Name" />
+                        <TableColumn id="add_product_p_inv_col" fx:id="part_selection_inventory" prefWidth="114.0" text="Inventory Level" />
+                        <TableColumn id="add_product_p_price_col" fx:id="part_selection_price" prefWidth="165.0" text="Price / Cost per unit" />
                     </columns>
                   </TableView>
                </content>
@@ -117,10 +117,10 @@
                <content>
                   <TableView id="add_product_associated_parts_table" fx:id="add_product_associated_parts_table" prefHeight="157.0" prefWidth="463.0">
                     <columns>
-                      <TableColumn id="add_product_assoc_data_id_col" prefWidth="75.0" text="Part ID" />
-                      <TableColumn id="add_product_assoc_data_name_col" prefWidth="111.0" text="Part Name" />
-                        <TableColumn id="add_product_assoc_data_inv_col" prefWidth="122.0" text="Inventory Level" />
-                        <TableColumn id="add_product_assoc_data_price_col" prefWidth="154.0" text="Price / Cost per unit" />
+                      <TableColumn id="add_product_assoc_data_id_col" fx:id="associated_part_id" prefWidth="75.0" text="Part ID" />
+                      <TableColumn id="add_product_assoc_data_name_col" fx:id="associated_part_name" prefWidth="111.0" text="Part Name" />
+                        <TableColumn id="add_product_assoc_data_inv_col" fx:id="associated_part_inventory" prefWidth="122.0" text="Inventory Level" />
+                        <TableColumn id="add_product_assoc_data_price_col" fx:id="associated_part_price" prefWidth="154.0" text="Price / Cost per unit" />
                     </columns>
                   </TableView>
                </content>

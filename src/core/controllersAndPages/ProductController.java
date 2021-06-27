@@ -1,11 +1,13 @@
 package core.controllersAndPages;
 
-import core.classes.InHouse;
-import core.classes.Inventory;
-import core.classes.Outsourced;
-import core.classes.Product;
+import core.classes.*;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,8 @@ import java.text.MessageFormat;
 
 public class ProductController {
     private Inventory inventory;
+    private ObservableList<Part> partsToAdd = FXCollections.observableArrayList();
+
     int Id = -1;
 
     @FXML
@@ -32,13 +36,26 @@ public class ProductController {
     @FXML
     private Button add_product_save_btn, add_product_cancel_btn;
 
+    //<editor-fold desc="table elements">
+    @FXML
+    private TableView<Part> add_product_parts_selection_table, add_product_associated_parts_table;
+
+    @FXML
+    private TableColumn<Part, Integer> part_selection_id, associated_part_id, associated_part_inventory, part_selection_inventory;
+
+    @FXML
+    private TableColumn<Part, String> part_selection_name, associated_part_name;
+
+    @FXML
+    private TableColumn<Part, Double> part_selection_price, associated_part_price;
+    //</editor-fold>
+
     @FXML
     public void initialize(Inventory inventory){
         this.inventory = inventory;
         this.Id = inventory.getAllProducts().size() + 1;
         add_product_id_field.setText(String.valueOf(this.Id));
-
-
+        populateSelectionTable();
     }
 
     /**
@@ -50,7 +67,6 @@ public class ProductController {
      */
     @FXML
     public void onSaveProductClick (ActionEvent actionEvent) throws IOException {
-
         boolean isComplete= checkFields();
         boolean isValid =  checkValidInput();
 
@@ -62,6 +78,7 @@ public class ProductController {
             int min = Integer.parseInt(add_product_min_field.getText().strip());
 
             Product newProduct = new Product(this.Id, name, price, inv,  max, min );
+            partsToAdd.forEach(part->{ newProduct.addAssociatedPart(part); });
             this.inventory.addProduct(newProduct);
 
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
@@ -226,8 +243,25 @@ public class ProductController {
         return true;
     }
 
+    /**
+     * fills the parts selection table.
+     */
+    private void populateSelectionTable(){
+        part_selection_id.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
+        part_selection_name.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        part_selection_inventory.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
+        part_selection_price.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
+        add_product_parts_selection_table.setItems(inventory.getAllParts());
 
+    }
 
+    private void populateAssociatedParts(){
+        associated_part_id.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getId()).asObject());
+        associated_part_name.setCellValueFactory(data-> new SimpleStringProperty(data.getValue().getName()));
+        associated_part_inventory.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
+        associated_part_price.setCellValueFactory(data-> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
 
+        add_product_associated_parts_table.setItems(this.partsToAdd);
+    }
 
 }
