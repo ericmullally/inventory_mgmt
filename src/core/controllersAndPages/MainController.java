@@ -115,7 +115,6 @@ public class MainController {
 
     }
 
-
     /**
      * @param actionEvent
      * @throws IOException
@@ -123,7 +122,10 @@ public class MainController {
      * in the product section of the main page
      */
     public void onAddProductClick(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("pages/AddProduct.fxml"));
+        FXMLLoader addProductLoader = new FXMLLoader(getClass().getResource("pages/AddProduct.fxml"));
+        Parent root = addProductLoader.load();
+        ProductController addProductController =  addProductLoader.getController();
+        addProductController.initialize(this.inventory);
         Stage productStage = new Stage();
         productStage.setScene(new Scene(root));
         productStage.setTitle("Add Product");

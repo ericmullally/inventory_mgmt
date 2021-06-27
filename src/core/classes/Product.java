@@ -1,9 +1,11 @@
 package core.classes;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Product {
-    Part[] Parts = {};
+    ObservableList<Part> parts = FXCollections.observableArrayList();
     private int id;
     private String name;
     private double price;
@@ -17,7 +19,6 @@ public class Product {
         this.price = price;
         this.stock = stock;
         this.min = min;
-        this.max = max;
         this.max = max;
     }
 
@@ -106,7 +107,7 @@ public class Product {
      * @param newPart New Part object to add.
      */
     public void addAssociatedPart(Part newPart){
-
+        this.parts.add(newPart);
     }
 
     /**
@@ -114,14 +115,22 @@ public class Product {
      * @return true if Part found and removed, false otherwise.
      */
     public boolean deleteAssociatedPart(int Id){
-        return true;
+        for(int i =0; i < parts.size(); i ++){
+            if(Id == parts.get(i).getId() ){
+                parts.remove(i);
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
      *
      * @return the associated part list.
      */
-    public Part[] getAllAssociatedParts(){
-    return this.Parts;
+    public ObservableList<Part> getAllAssociatedParts(){
+        return this.parts;
     }
 }

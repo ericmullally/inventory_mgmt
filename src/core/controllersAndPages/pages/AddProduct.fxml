@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.ProductController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="531.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.ProductController">
    <children>
       <GridPane id="add_product_grid" prefHeight="510.0" prefWidth="1154.0">
         <columnConstraints>
@@ -68,17 +68,17 @@
                   <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <TextField id="add_product_max_field" maxWidth="150.0" minWidth="50.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TextField id="add_product_max_field" fx:id="add_product_max_field" maxWidth="150.0" minWidth="50.0" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_product_price_field" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <TextField id="add_product_price_field" fx:id="add_product_price_field" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_product_inv_field" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField id="add_product_inv_field" fx:id="add_product_inventory_field" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -88,12 +88,12 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_product_id_field" editable="false" promptText="Auto Gen - Disabled" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField id="add_product_id_field" fx:id="add_product_id_field" editable="false" promptText="Auto Gen - Disabled" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_product_min_field" maxWidth="151.0" minWidth="50.0" prefHeight="25.0" prefWidth="151.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
+            <TextField id="add_product_min_field" fx:id="add_product_min_field" maxWidth="151.0" minWidth="50.0" prefHeight="25.0" prefWidth="151.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -133,12 +133,12 @@
                   <Insets right="10.0" />
                </GridPane.margin>
             </Button>
-            <Button id="add_product_save_btn" mnemonicParsing="false" text="Save" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
+            <Button id="add_product_save_btn" fx:id="add_product_save_btn" mnemonicParsing="false" onAction="#onSaveProductClick" text="Save" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
                <GridPane.margin>
                   <Insets bottom="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Button>
-            <Button id="add_product_cancel_btn" mnemonicParsing="false" text="Cancel" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
+            <Button id="add_product_cancel_btn" fx:id="add_product_cancel_btn" mnemonicParsing="false" onAction="#onCancelClick" text="Cancel" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
                <GridPane.margin>
                   <Insets bottom="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
