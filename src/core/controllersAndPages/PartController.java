@@ -70,16 +70,12 @@ public class PartController {
     /**
      *
      * @param actionEvent is unused.
-     * @throws IOException
+     * @throws IOException exceptions are thrown in isValid and is complete methods.
      * Creates new part class outsourced or inhouse depending on current selection.
      * Creates new main page and gives it thee new inventory object with the new part.
      */
     @FXML
     public void onSavePartClick (ActionEvent actionEvent) throws IOException {
-        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
-        Parent root = mainLoader.load();
-        MainController mainController = mainLoader.getController();
-
         boolean isComplete= checkFields();
         boolean isValid =  checkValidInput();
 
@@ -100,6 +96,10 @@ public class PartController {
                InHouse newPart = new InHouse(Id, name,  price, inv, max, min, machineIdOrName);
                this.inventory.addPart(newPart);
            }
+
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+            Parent root = mainLoader.load();
+            MainController mainController = mainLoader.getController();
             mainController.initialize(this.inventory);
             Stage primaryStage = new Stage();
             primaryStage.setTitle("Inventory Management System");
@@ -121,10 +121,13 @@ public class PartController {
      */
     @FXML
     public void onCancelClick(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("pages/MainPage.fxml"));
+        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+        Parent root = mainLoader.load();
+        MainController mainController = mainLoader.getController();
         Stage mainStage = new Stage();
         mainStage.setScene(new Scene(root));
         mainStage.setTitle("Inventory Management System");
+        mainController.initialize(this.inventory);
         mainStage.show();
 
         Stage currentStage = (Stage) add_part_cancel_btn.getScene().getWindow();

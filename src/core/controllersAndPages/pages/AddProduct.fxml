@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.ProductController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.ProductController">
    <children>
       <GridPane id="add_product_grid" prefHeight="510.0" prefWidth="1154.0">
         <columnConstraints>
@@ -83,7 +83,7 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField id="add_product_name_field" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField id="add_product_name_field" fx:id="add_product_name_field" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -100,7 +100,7 @@
             </TextField>
             <ScrollPane id="product_part_data_scroll" prefHeight="237.0" prefWidth="546.0" style="-fx-border-color: black; -fx-border-radius: 5;" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="3">
                <content>
-                  <TableView id="add_product_p_data_table" prefHeight="173.0" prefWidth="477.0">
+                  <TableView id="add_product_parts_selection_table" fx:id="add_product_parts_selection_table" prefHeight="173.0" prefWidth="477.0">
                     <columns>
                       <TableColumn id="add_product_p_id_col" prefWidth="75.0" text="Part ID" />
                       <TableColumn id="add_product_p_Name_col" prefWidth="115.0" text="Part Name" />
@@ -115,7 +115,7 @@
             </ScrollPane>
             <ScrollPane id="product_associated_data_scroll" prefHeight="160.0" prefWidth="546.0" style="-fx-border-color: black; -fx-border-radius: 5;" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.rowSpan="3">
                <content>
-                  <TableView id="add_product_assoc_data_table" prefHeight="157.0" prefWidth="463.0">
+                  <TableView id="add_product_associated_parts_table" fx:id="add_product_associated_parts_table" prefHeight="157.0" prefWidth="463.0">
                     <columns>
                       <TableColumn id="add_product_assoc_data_id_col" prefWidth="75.0" text="Part ID" />
                       <TableColumn id="add_product_assoc_data_name_col" prefWidth="111.0" text="Part Name" />

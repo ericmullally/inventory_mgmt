@@ -2,6 +2,7 @@ package core.controllersAndPages;
 
 import core.classes.Inventory;
 import core.classes.Part;
+import core.classes.Product;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,27 +23,44 @@ import java.io.IOException;
 public class MainController {
     /**
      * todo section
+     * onAddProduct click needs the inventory object
      * on first initialize create a few products and parts.
      * add products to the table on init.
      * part double value needs two decimal places
      * part cancel button needs to send the current inventory back.
+     * Experiment: See if product table can be made the other way since it isn't static
      */
 
     private Inventory inventory;
 
     @FXML
-    private Button main_add_part_btn;
+    private Button main_add_part_btn, product_add_btn;
 
+    //<editor-fold desc="partsTable">
     @FXML
     private TableView<Part> main_parts_table_view;
     @FXML
-    private TableColumn<Part,Integer> part_id_col;
+    private TableColumn<Part, Integer> part_id_col;
     @FXML
     private TableColumn<Part, String> part_name_col;
     @FXML
     private TableColumn<Part, Integer> part_inventory_col;
     @FXML
     private TableColumn<Part, Double> part_price_col;
+    //</editor-fold>
+
+    //<editor-fold desc="productTable">
+    @FXML
+    private TableView<Product> main_product_table_view;
+    @FXML
+    private TableColumn<Product, Integer> product_id_col;
+    @FXML
+    private TableColumn<Product, String> product_name_col;
+    @FXML
+    private TableColumn<Product, Integer> product_inventory_col;
+    @FXML
+    private TableColumn<Product, Double> product_price_col;
+    //</editor-fold>
 
     @FXML
     public void initialize(Inventory inventory1){
@@ -57,12 +75,19 @@ public class MainController {
      * populates the tables in the main view.
      */
     private void populateDisplay(){
+        //parts items
         part_id_col.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
         part_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         part_inventory_col.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
         part_price_col.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
-
         main_parts_table_view.setItems( inventory.getAllParts());
+
+        //product items
+        product_id_col.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
+        product_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        product_inventory_col.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
+        product_price_col.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
+        main_product_table_view.setItems(inventory.getAllProducts());
     };
 
     /**
@@ -76,11 +101,9 @@ public class MainController {
             Parent root = addPartLoader.load();
             PartController addPartController = addPartLoader.getController();
             addPartController.initialize(inventory);
-
             Stage partStage = new Stage();
             partStage.setScene(new Scene(root));
             partStage.setTitle("Add Part");
-            partStage.initModality(Modality.APPLICATION_MODAL);
             Stage currentStage = (Stage)main_add_part_btn.getScene().getWindow();
             partStage.setOnCloseRequest(windowEvent -> {
                 partStage.close();
@@ -104,7 +127,14 @@ public class MainController {
         Stage productStage = new Stage();
         productStage.setScene(new Scene(root));
         productStage.setTitle("Add Product");
-        productStage.initModality(Modality.APPLICATION_MODAL);
+
+        Stage currentStage = (Stage)product_add_btn.getScene().getWindow();
+        productStage.setOnCloseRequest(event ->{
+            productStage.close();
+            currentStage.show();
+        });
+
+        currentStage.hide();
         productStage.show();
     }
 }
