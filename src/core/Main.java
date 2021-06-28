@@ -19,7 +19,11 @@ public class Main extends Application {
 
     }
 
-
+    /**
+     *
+     * @param args
+     * javadoc location: inventory_mgmt/javadoc
+     */
     public static void main(String[] args) {
         launch(args);
     }

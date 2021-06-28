@@ -4,8 +4,6 @@ import core.classes.*;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +13,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.text.MessageFormat;
+
 
 /**
  * controls the product add or edit page
@@ -26,6 +24,7 @@ import java.text.MessageFormat;
 public class ProductController {
     private Inventory inventory;
     private ObservableList<Part> partsToAdd = FXCollections.observableArrayList();
+    private ObservableList<Part> selectedItems;
 
     int Id = -1;
 
@@ -34,7 +33,7 @@ public class ProductController {
             add_product_max_field, add_product_min_field;
 
     @FXML
-    private Button add_product_save_btn, add_product_cancel_btn;
+    private Button add_product_save_btn, add_product_cancel_btn, add_associated_part_btn, remove_associated_part_btn;
 
     //<editor-fold desc="table elements">
     @FXML
@@ -116,6 +115,17 @@ public class ProductController {
 
         Stage currentStage = (Stage) add_product_cancel_btn.getScene().getWindow();
         currentStage.close();
+    }
+
+    @FXML
+    private void onAddAssociatedPartClick( ActionEvent actionEvent){
+       ObservableList<Part> items =  add_product_parts_selection_table.getItems();
+       for(Part item : items){
+            if(!partsToAdd.contains(item)){
+                partsToAdd.add(item);
+            }
+       }
+       populateAssociatedParts();
     }
 
     /**
@@ -252,16 +262,18 @@ public class ProductController {
         part_selection_inventory.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
         part_selection_price.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
         add_product_parts_selection_table.setItems(inventory.getAllParts());
-
     }
 
+    /**
+     * populates the associated parts table.
+     */
     private void populateAssociatedParts(){
         associated_part_id.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getId()).asObject());
         associated_part_name.setCellValueFactory(data-> new SimpleStringProperty(data.getValue().getName()));
         associated_part_inventory.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
         associated_part_price.setCellValueFactory(data-> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
-
         add_product_associated_parts_table.setItems(this.partsToAdd);
     }
+
 
 }
