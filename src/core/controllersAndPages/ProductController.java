@@ -12,19 +12,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javax.security.auth.callback.Callback;
 import java.io.IOException;
 import java.text.MessageFormat;
 
 
 /**
  * controls the product add or edit page
+ *
+ * RUNTIME EXCEPTION: In onAddAssociatedPartClick: Null Pointer Exception.
+ * I was referencing the wrong table to get the selections.
+ * CORRECTION: I changed the table view name to the correct one.
+ *
+ * IMPROVEMENTS: The user is unable to deselect a part by clicking it again.
+ * a click Listener could be added to the table for each element, so that if it is clicked when already selected
+ * it will be deselected.
  */
 
 public class ProductController {
     private Inventory inventory;
     private ObservableList<Part> partsToAdd = FXCollections.observableArrayList();
-    private ObservableList<Part> selectedItems;
 
     int Id = -1;
 
@@ -33,7 +43,7 @@ public class ProductController {
             add_product_max_field, add_product_min_field;
 
     @FXML
-    private Button add_product_save_btn, add_product_cancel_btn, add_associated_part_btn, remove_associated_part_btn;
+    private Button add_product_save_btn, add_product_cancel_btn;
 
     //<editor-fold desc="table elements">
     @FXML
@@ -49,11 +59,17 @@ public class ProductController {
     private TableColumn<Part, Double> part_selection_price, associated_part_price;
     //</editor-fold>
 
+    /**
+     *
+     * @param inventory main inventory element to add the new product to.
+     * creates the new products ID. sets part selection mode. populates part selection table.
+     */
     @FXML
     public void initialize(Inventory inventory){
         this.inventory = inventory;
         this.Id = inventory.getAllProducts().size() + 1;
         add_product_id_field.setText(String.valueOf(this.Id));
+        add_product_parts_selection_table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         populateSelectionTable();
     }
 
@@ -65,7 +81,7 @@ public class ProductController {
      * Creates new main page and gives it thee new inventory object with the new products.
      */
     @FXML
-    public void onSaveProductClick (ActionEvent actionEvent) throws IOException {
+    private void onSaveProductClick (ActionEvent actionEvent) throws IOException {
         boolean isComplete= checkFields();
         boolean isValid =  checkValidInput();
 
@@ -103,7 +119,7 @@ public class ProductController {
      * does not save current products.
      */
     @FXML
-    public void onCancelClick(ActionEvent actionEvent) throws IOException {
+    private void onCancelClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
         Parent root = mainLoader.load();
         MainController mainController = mainLoader.getController();
@@ -117,15 +133,48 @@ public class ProductController {
         currentStage.close();
     }
 
+    /**
+     *
+     * @param actionEvent is unused
+     * Adds selected Parts to the items to add list. if they are not already present.
+     * then re-populates the associated parts list.
+     */
     @FXML
     private void onAddAssociatedPartClick( ActionEvent actionEvent){
-       ObservableList<Part> items =  add_product_parts_selection_table.getItems();
+       ObservableList<Part> items =  add_product_parts_selection_table.getSelectionModel().getSelectedItems();
        for(Part item : items){
             if(!partsToAdd.contains(item)){
                 partsToAdd.add(item);
             }
        }
        populateAssociatedParts();
+    }
+
+    /**
+     *
+     * @param actionEvent is unused
+     * Shows alert to confirm the user wishes to remove the part.
+     *  removes the selected part from the items to add list.
+     */
+    @FXML
+    private void onAssociatedRemoveClick(ActionEvent actionEvent){
+        Part item =  add_product_associated_parts_table.getSelectionModel().getSelectedItem();
+        int partId = item.getId();
+        boolean response;
+        Alert conformation = new Alert(Alert.AlertType.CONFIRMATION);
+        conformation.setHeaderText("Please Confirm");
+        conformation.setContentText(String.format("Are you sure you want to remove Associated part ID:  %d", partId ));
+        conformation.initModality(Modality.APPLICATION_MODAL);
+        conformation.showAndWait();
+        response =  conformation.getResult().getButtonData().isDefaultButton();
+
+        if(response){
+                partsToAdd.remove(item);
+        }else{
+            return;
+        }
+
+        populateAssociatedParts();
     }
 
     /**
@@ -274,6 +323,5 @@ public class ProductController {
         associated_part_price.setCellValueFactory(data-> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
         add_product_associated_parts_table.setItems(this.partsToAdd);
     }
-
 
 }

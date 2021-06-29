@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Product {
-    ObservableList<Part> parts = FXCollections.observableArrayList();
+    private ObservableList<Part> parts = FXCollections.observableArrayList();
     private int id;
     private String name;
     private double price;
@@ -13,6 +13,15 @@ public class Product {
     private int min;
     private int max;
 
+    /**
+     *
+     * @param id int value
+     * @param name string value
+     * @param price double value
+     * @param stock int value
+     * @param min int value
+     * @param max int value
+     */
     public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
@@ -22,6 +31,9 @@ public class Product {
         this.max = max;
     }
 
+    /**
+     * @return The part instance Id
+     */
     public int getId() {
         return id;
     }
@@ -34,7 +46,7 @@ public class Product {
     }
 
     /**
-     * @return the name
+     * @return the name of the product instance
      */
     public String getName() {
         return name;
@@ -48,7 +60,7 @@ public class Product {
     }
 
     /**
-     * @return the price
+     * @return the price of the product instance
      */
     public double getPrice() {
         return price;
@@ -62,7 +74,7 @@ public class Product {
     }
 
     /**
-     * @return the stock
+     * @return the stock of the product instance
      */
     public int getStock() {
         return stock;
@@ -76,7 +88,7 @@ public class Product {
     }
 
     /**
-     * @return the min
+     * @return the min of the product instance
      */
     public int getMin() {
         return min;
@@ -90,7 +102,7 @@ public class Product {
     }
 
     /**
-     * @return the max
+     * @return the max of the product instance
      */
     public int getMax() {
         return max;

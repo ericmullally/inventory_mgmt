@@ -3,14 +3,13 @@ package core.classes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Inventory object holds parts and products entered into the system.
+ */
 public class Inventory {
   private ObservableList<Part> allParts = FXCollections.observableArrayList();
   private ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
-
-  /**
-   * could need params.
-   */
   public Inventory(){
 
   }

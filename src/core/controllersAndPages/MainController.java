@@ -14,8 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -23,12 +21,7 @@ import java.io.IOException;
 public class MainController {
     /**
      * todo section
-     * onAddProduct click needs the inventory object
-     * on first initialize create a few products and parts.
-     * add products to the table on init.
      * part double value needs two decimal places
-     * part cancel button needs to send the current inventory back.
-     * Experiment: See if product table can be made the other way since it isn't static
      */
 
     private Inventory inventory;
@@ -62,12 +55,21 @@ public class MainController {
     private TableColumn<Product, Double> product_price_col;
     //</editor-fold>
 
+    /**
+     *
+     * @param inventory1 updated inventory
+     *  sets the current inventory to the updated inventory.
+     *  calls populateDisplay.
+     */
     @FXML
     public void initialize(Inventory inventory1){
         this.inventory = inventory1;
         populateDisplay();
     }
 
+    /**
+     * creates a new inventory object.
+     */
     @FXML
     public void initialize(){ this.inventory = new Inventory(); }
 
@@ -91,12 +93,11 @@ public class MainController {
     };
 
     /**
-     * @param actionEvent
+     * @param actionEvent is unused.
      * @throws IOException
      * Opens the add Parts Page
      */
     public void onAddPartClick(ActionEvent actionEvent) throws IOException {
-
             FXMLLoader addPartLoader = new FXMLLoader(getClass().getResource("pages/AddPart.fxml"));
             Parent root = addPartLoader.load();
             PartController addPartController = addPartLoader.getController();
@@ -112,6 +113,16 @@ public class MainController {
 
             partStage.show();
             currentStage.hide();
+
+    }
+
+    /**
+     *
+     * @param actionEvent is unused
+     * @throws IOException
+     * displays part edit page.
+     */
+    public void onEditPartClick(ActionEvent actionEvent) throws IOException{
 
     }
 
@@ -138,5 +149,15 @@ public class MainController {
 
         currentStage.hide();
         productStage.show();
+    }
+
+    /**
+     *
+     * @param actionEvent is unused
+     * @throws IOException
+     * displays product edit page.
+     */
+    public void onEditProductClick(ActionEvent actionEvent) throws IOException{
+
     }
 }
