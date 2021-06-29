@@ -3,6 +3,7 @@ package core.controllersAndPages;
 import core.classes.InHouse;
 import core.classes.Inventory;
 import core.classes.Outsourced;
+import core.classes.Part;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -22,11 +23,20 @@ import java.text.MessageFormat;
 
 /**
  * controller for the parts page.
+ *
+ * RUNTIME ERROR: after adding the edit functionality I wrote the new editpart function with a foreach statement
+ * to check for the matching part and use the setter functions. however I put the if isComplete && isValid check inside the foreach.
+ * this cause the program to redirect to the main page if the form was not filled out correctly.
+ *
+ * SOLUTION: I moved the if isComplete and isValid check to wrap the for each statement and save functionality.
+ *
+ *
  */
 
 public class PartController {
     Inventory inventory;
     int Id = -1;
+    boolean isEdit;
 
     @FXML
     private Label add_part_machine_label;
@@ -50,6 +60,7 @@ public class PartController {
     public void initialize(Inventory inventory){
         this.inventory = inventory;
         Id = inventory.getAllParts().size() + 1 ;
+        this.isEdit = false;
         add_part_id_field.setText(String.valueOf(Id));
 
         final ToggleGroup radioBtnGroup = new ToggleGroup();
@@ -67,47 +78,41 @@ public class PartController {
         });
     }
 
+    @FXML
+    public void initialize(Inventory inventory, int Id){
+        this.inventory = inventory;
+        this.Id = Id;
+        this.isEdit = true;
+        add_part_id_field.setText(String.valueOf(Id));
+
+        final ToggleGroup radioBtnGroup = new ToggleGroup();
+        in_house_btn.setToggleGroup(radioBtnGroup);
+        outsourced_btn.setToggleGroup(radioBtnGroup);
+        radioBtnGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
+                if (t1 == outsourced_btn) {
+                    add_part_machine_label.setText("Company Name");
+                } else {
+                    add_part_machine_label.setText("Machine ID");
+                }
+            }
+        });
+        populatePartData();
+    }
+
     /**
      *
      * @param actionEvent is unused.
      * @throws IOException exceptions are thrown in isValid and is complete methods.
-     * Creates new part class outsourced or inhouse depending on current selection.
-     * Creates new main page and gives it thee new inventory object with the new part.
+     * calls edit or create new part methods depending on isEdit flag.
      */
     @FXML
     public void onSavePartClick (ActionEvent actionEvent) throws IOException {
-        boolean isComplete= checkFields();
-        boolean isValid =  checkValidInput();
-
-        if(isComplete && isValid){
-           String name = add_part_name_field.getText();
-           int inv = Integer.parseInt(add_part_inv_field.getText().strip());
-           double price = Double.parseDouble(add_part_price_field.getText().strip());
-           int max = Integer.parseInt(add_part_max_field.getText().strip());
-           int min = Integer.parseInt(add_part_min_field.getText().strip());
-
-           if(outsourced_btn.isSelected()){
-               String machineIdOrName = add_part_id_or_company_field.getText();
-               Outsourced newPart = new Outsourced(Id, name,  price, inv, max, min, machineIdOrName);
-
-               this.inventory.addPart(newPart);
-           }else{
-               int machineIdOrName = Integer.parseInt(add_part_id_or_company_field.getText());
-               InHouse newPart = new InHouse(Id, name,  price, inv, max, min, machineIdOrName);
-               this.inventory.addPart(newPart);
-           }
-
-            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
-            Parent root = mainLoader.load();
-            MainController mainController = mainLoader.getController();
-            mainController.initialize(this.inventory);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Inventory Management System");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
-
-            Stage currentStage = (Stage) add_part_save_btn.getScene().getWindow();
-            currentStage.close();
+        if(isEdit){
+            editExistingPart();
+        }else{
+            createNewPart();
         }
 
     }
@@ -132,6 +137,87 @@ public class PartController {
 
         Stage currentStage = (Stage) add_part_cancel_btn.getScene().getWindow();
         currentStage.close();
+    }
+
+    /**
+     * @throws IOException
+     * Creates new part class outsourced or inhouse depending on current selection.
+     * Creates new main page and gives it the new inventory object with the new part.
+     */
+    private void createNewPart() throws IOException{
+        boolean isComplete= checkFields();
+        boolean isValid =  checkValidInput();
+
+        if(isComplete && isValid){
+            String name = add_part_name_field.getText();
+            int inv = Integer.parseInt(add_part_inv_field.getText().strip());
+            double price = Double.parseDouble(add_part_price_field.getText().strip());
+            int max = Integer.parseInt(add_part_max_field.getText().strip());
+            int min = Integer.parseInt(add_part_min_field.getText().strip());
+
+            if(outsourced_btn.isSelected()){
+                String machineIdOrName = add_part_id_or_company_field.getText();
+                Outsourced newPart = new Outsourced(Id, name,  price, inv, max, min, machineIdOrName);
+
+                this.inventory.addPart(newPart);
+            }else{
+                int machineIdOrName = Integer.parseInt(add_part_id_or_company_field.getText());
+                InHouse newPart = new InHouse(Id, name,  price, inv, max, min, machineIdOrName);
+                this.inventory.addPart(newPart);
+            }
+
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+            Parent root = mainLoader.load();
+            MainController mainController = mainLoader.getController();
+            mainController.initialize(this.inventory);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Inventory Management System");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+
+            Stage currentStage = (Stage) add_part_save_btn.getScene().getWindow();
+            currentStage.close();
+        }
+    }
+
+    /**
+     * @throws IOException
+     * updates an existing part using part setter methods.
+     * Creates new main page and gives it the inventory with the edited part.
+     */
+    private void editExistingPart() throws IOException{
+        boolean isComplete= checkFields();
+        boolean isValid =  checkValidInput();
+
+        if(isComplete && isValid){
+            inventory.getAllParts().forEach(item ->{
+                if(item.getId() == this.Id){
+                    String name = add_part_name_field.getText();
+                    int inv = Integer.parseInt(add_part_inv_field.getText().strip());
+                    double price = Double.parseDouble(add_part_price_field.getText().strip());
+                    int max = Integer.parseInt(add_part_max_field.getText().strip());
+                    int min = Integer.parseInt(add_part_min_field.getText().strip());
+                    item.setName(name);
+                    item.setStock(inv);
+                    item.setPrice(price);
+                    item.setMax(max);
+                    item.setMin(min);
+                }
+            });
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+            Parent root = mainLoader.load();
+            MainController mainController = mainLoader.getController();
+            mainController.initialize(this.inventory);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Inventory Management System");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+
+            Stage currentStage = (Stage) add_part_save_btn.getScene().getWindow();
+            currentStage.close();
+
+        }
+
     }
 
     /**
@@ -273,4 +359,24 @@ public class PartController {
         return true;
     }
 
+    private void populatePartData(){
+        inventory.getAllParts().forEach(item -> {
+            if(item.getId() == this.Id){
+               add_part_name_field.setText(item.getName());
+               add_part_inv_field.setText(String.valueOf(item.getStock()));
+               add_part_price_field.setText(String.valueOf(item.getPrice()));
+               add_part_max_field.setText(String.valueOf(item.getMax()));
+               add_part_min_field.setText(String.valueOf(item.getMin()));
+               if(item instanceof InHouse){
+                   in_house_btn.setSelected(true);
+                   add_part_id_or_company_field.setText( String.valueOf(((InHouse) item).getMachinedId()));
+               }else{
+                   outsourced_btn.setSelected(true);
+                   add_part_id_or_company_field.setText( ((Outsourced) item).getCompanyName());
+               }
+
+
+            }
+        });
+    }
 }

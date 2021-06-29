@@ -11,13 +11,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
+/**
+ * controls the main page of the application.
+ *
+ *
+ *
+ */
 public class MainController {
     /**
      * todo section
@@ -116,6 +123,7 @@ public class MainController {
 
     }
 
+
     /**
      *
      * @param actionEvent is unused
@@ -123,7 +131,32 @@ public class MainController {
      * displays part edit page.
      */
     public void onEditPartClick(ActionEvent actionEvent) throws IOException{
+        Part partToEdit = main_parts_table_view.getSelectionModel().getSelectedItem();
 
+        if(partToEdit == null){
+            Alert noSelection = new Alert(Alert.AlertType.ERROR);
+            noSelection.setHeaderText("No part selected");
+            noSelection.setContentText("Please select a part to edit by clicking on it.");
+            noSelection.initModality(Modality.APPLICATION_MODAL);
+            noSelection.showAndWait();
+            return;
+        }
+
+        FXMLLoader addPartLoader = new FXMLLoader(getClass().getResource("pages/AddPart.fxml"));
+        Parent root = addPartLoader.load();
+        PartController addPartController = addPartLoader.getController();
+        addPartController.initialize(inventory, partToEdit.getId());
+        Stage partStage = new Stage();
+        partStage.setScene(new Scene(root));
+        partStage.setTitle("Edit Part");
+        Stage currentStage = (Stage)main_add_part_btn.getScene().getWindow();
+        partStage.setOnCloseRequest(windowEvent -> {
+            partStage.close();
+            currentStage.show();
+        });
+
+        partStage.show();
+        currentStage.hide();
     }
 
     /**
