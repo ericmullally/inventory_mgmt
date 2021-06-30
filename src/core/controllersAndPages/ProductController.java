@@ -73,6 +73,14 @@ public class ProductController {
         populateSelectionTable();
     }
 
+    public void initialize(Inventory inventory, int id){
+        this.inventory = inventory;
+        this.Id = id;
+        add_product_id_field.setText(String.valueOf(this.Id));
+        add_product_parts_selection_table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        populateSelectionTable();
+    }
+
     /**
      *
      * @param actionEvent is unused.

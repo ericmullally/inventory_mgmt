@@ -32,9 +32,16 @@ public class Inventory {
    * @param partId looks up a part in the inventory by it's ID.
    * @return a Part object if a matching ID is found.
    */
-//  public Part lookUpPart(int partId){
-//
-//  }
+  public Part lookUpPart(int partId){
+    int index = -1;
+    for(int i =0; i < allParts.size(); i++){
+      if(allParts.get(i).getId() == partId){
+          index = i;
+      }
+
+    }
+      return allParts.get(index);
+  }
 
   /**
    * @param partName looks up a part in the inventory by it's Name.
@@ -65,18 +72,18 @@ public class Inventory {
    * @param part Part Object to replace the old version.
    * finds and replaces an existing part in the part list.
    */
-  public void updatePart(int index, Part part){
-
-  }
+//  public void updatePart(int index, Part part){
+//
+//  }
 
   /**
    * @param index Products position in the list.
    * @param product Product Object to replace the old version.
    * finds and replaces an existing Product in the Product list.
    */
-  public void updateProduct(int index, Product product){
-
-  }
+//  public void updateProduct(int index, Product product){
+//
+//  }
 
   /**
    * @param part Part object to be removed.

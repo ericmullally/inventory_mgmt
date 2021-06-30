@@ -19,8 +19,6 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-
-
 /**
  * controller for the parts page.
  *
@@ -30,6 +28,7 @@ import java.text.MessageFormat;
  *
  * SOLUTION: I moved the if isComplete and isValid check to wrap the for each statement and save functionality.
  *
+ * IMPROVEMENT:  creating and showing the main page could be extracted to a separate function to make the code more DRY
  *
  */
 
@@ -77,6 +76,11 @@ public class PartController {
         });
     }
 
+    /**
+     *
+     * @param inventory inventory object to add the part to.
+     * @param Id of the part to be edited.
+     */
     @FXML
     public void initialize(Inventory inventory, int Id){
         this.inventory = inventory;
@@ -203,6 +207,7 @@ public class PartController {
                         item.setPrice(price);
                         item.setMax(max);
                         item.setMin(min);
+                        updateInProduct(item);
                     }else{
                         inventory.deletePart(item);
                         Part newPart;
@@ -214,6 +219,7 @@ public class PartController {
                             newPart = new Outsourced(Id, name,price, inv, min,max, companyName);
                         }
                         inventory.addPart(newPart);
+                        updateInProduct(newPart);
                     }
 
                 }
@@ -234,6 +240,23 @@ public class PartController {
 
         }
 
+    }
+
+    /**
+     *
+     * @param part part to update
+     * removes the old version of the part in the product and replaces it with a new one.
+     * note: this is an O(n^2) operation.
+     */
+    private void updateInProduct(Part part){
+        inventory.getAllProducts().forEach(product -> {
+            product.getAllAssociatedParts().forEach(item->{
+                if(item.getId() == Id){
+                    product.deleteAssociatedPart(part.getId());
+                    product.addAssociatedPart(part);
+                }
+            });
+        });
     }
 
     /**
@@ -375,6 +398,9 @@ public class PartController {
         return true;
     }
 
+    /**
+     * sets the fields to the part data.
+     */
     private void populatePartData(){
         inventory.getAllParts().forEach(item -> {
             if(item.getId() == this.Id){
