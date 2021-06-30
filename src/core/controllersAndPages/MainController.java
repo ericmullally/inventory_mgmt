@@ -6,6 +6,7 @@ import core.classes.Product;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -99,6 +100,7 @@ public class MainController {
         main_product_table_view.setItems(inventory.getAllProducts());
     };
 
+
     /**
      * @param actionEvent is unused.
      * @throws IOException
@@ -122,7 +124,6 @@ public class MainController {
             currentStage.hide();
 
     }
-
 
     /**
      *
@@ -158,6 +159,45 @@ public class MainController {
         partStage.show();
         currentStage.hide();
     }
+
+    /**
+     * removes a part from the part display.
+     * also removes the part form any product that it is associated with.
+     * if part is not removed displays an error message.
+     */
+    public void onDeletePartClick(){
+        Part partToDelete = main_parts_table_view.getSelectionModel().getSelectedItem();
+        if(partToDelete == null){
+            Alert partSelectionError = new Alert(Alert.AlertType.ERROR);
+            partSelectionError.setHeaderText("No Part Selected");
+            partSelectionError.setContentText("There is no part selected to delete.");
+        }else{
+            Alert conformation = new Alert(Alert.AlertType.CONFIRMATION);
+            conformation.setHeaderText("Confirmation");
+            conformation.setContentText(String.format( "Are you sure you want to delete part: %d ", partToDelete.getId()));
+            conformation.showAndWait();
+            boolean response =  conformation.getResult().getButtonData().isDefaultButton();
+            if(response){
+                ObservableList<Product> inventoryToCheck =inventory.getAllProducts();
+                inventoryToCheck.forEach(item ->{
+                    if(item.getId() == partToDelete.getId()){
+                        item.deleteAssociatedPart(partToDelete.getId());
+                    }
+                });
+                boolean wasRemoved = inventory.deletePart(partToDelete);
+                if(!wasRemoved){
+                    Alert failed = new Alert(Alert.AlertType.ERROR);
+                    failed.setHeaderText("Part not removed.");
+                    failed.setContentText("Part was not successfully removed.");
+                    return;
+                }
+                populateDisplay();
+            }else{
+                return;
+            }
+        }
+    }
+
 
     /**
      * @param actionEvent

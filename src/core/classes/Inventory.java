@@ -83,7 +83,7 @@ public class Inventory {
    * @return true if part was found and successfully removed, false otherwise.
    */
   public boolean deletePart(Part part){
-    return true;
+    return allParts.remove(part);
   }
 
   /**

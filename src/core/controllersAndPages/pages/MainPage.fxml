@@ -67,7 +67,7 @@
                   </ScrollPane>
                   <Button id="parts_add_btn" fx:id="main_add_part_btn" alignment="CENTER" mnemonicParsing="false" onAction="#onAddPartClick" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Button id="parts_modify_btn" fx:id="part_modify_btn" mnemonicParsing="false" onAction="#onEditPartClick" text="Modify" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <Button id="parts_delete_btn" fx:id="part_delete_btn" alignment="CENTER" mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Button id="parts_delete_btn" fx:id="part_delete_btn" alignment="CENTER" mnemonicParsing="false" onAction="#onDeletePartClick" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <GridPane id="parts_view" layoutX="20.0" layoutY="101.0" style="-fx-border-color: black; -fx-border-radius: 10;" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="3">

@@ -51,7 +51,6 @@ public class PartController {
     @FXML
     private Button add_part_save_btn, add_part_cancel_btn;
 
-
     /**
      * Sets toggle buttonGroup, and adds event listener.
      * creates part Id.
@@ -157,12 +156,11 @@ public class PartController {
 
             if(outsourced_btn.isSelected()){
                 String machineIdOrName = add_part_id_or_company_field.getText();
-                Outsourced newPart = new Outsourced(Id, name,  price, inv, max, min, machineIdOrName);
-
+                Outsourced newPart = new Outsourced(Id, name,  price, inv, min, max, machineIdOrName);
                 this.inventory.addPart(newPart);
             }else{
                 int machineIdOrName = Integer.parseInt(add_part_id_or_company_field.getText());
-                InHouse newPart = new InHouse(Id, name,  price, inv, max, min, machineIdOrName);
+                InHouse newPart = new InHouse(Id, name,  price, inv, min,max, machineIdOrName);
                 this.inventory.addPart(newPart);
             }
 
@@ -190,20 +188,38 @@ public class PartController {
         boolean isValid =  checkValidInput();
 
         if(isComplete && isValid){
+            String name = add_part_name_field.getText();
+            int inv = Integer.parseInt(add_part_inv_field.getText().strip());
+            double price = Double.parseDouble(add_part_price_field.getText().strip());
+            int max = Integer.parseInt(add_part_max_field.getText().strip());
+            int min = Integer.parseInt(add_part_min_field.getText().strip());
+
             inventory.getAllParts().forEach(item ->{
-                if(item.getId() == this.Id){
-                    String name = add_part_name_field.getText();
-                    int inv = Integer.parseInt(add_part_inv_field.getText().strip());
-                    double price = Double.parseDouble(add_part_price_field.getText().strip());
-                    int max = Integer.parseInt(add_part_max_field.getText().strip());
-                    int min = Integer.parseInt(add_part_min_field.getText().strip());
-                    item.setName(name);
-                    item.setStock(inv);
-                    item.setPrice(price);
-                    item.setMax(max);
-                    item.setMin(min);
+                if(item.getId() == Id){
+                    if((in_house_btn.isSelected() && item instanceof InHouse) ||
+                            (outsourced_btn.isSelected() && item instanceof Outsourced)){
+                        item.setName(name);
+                        item.setStock(inv);
+                        item.setPrice(price);
+                        item.setMax(max);
+                        item.setMin(min);
+                    }else{
+                        inventory.deletePart(item);
+                        Part newPart;
+                        if(in_house_btn.isSelected()){
+                            int machineId = Integer.parseInt( add_part_id_or_company_field.getText().strip());
+                            newPart = new InHouse(Id, name,price, inv, min, max, machineId);
+                        }else{
+                            String companyName = add_part_id_or_company_field.getText();
+                            newPart = new Outsourced(Id, name,price, inv, min,max, companyName);
+                        }
+                        inventory.addPart(newPart);
+                    }
+
                 }
+
             });
+
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
             Parent root = mainLoader.load();
             MainController mainController = mainLoader.getController();
