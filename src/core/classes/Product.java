@@ -4,6 +4,16 @@ package core.classes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Product Item that may have sub-items in the form of parts.
+ *
+ * RUNTIME ERROR: location: deleteAssociatedPart.
+ * Out of bounds. I used parts.size() + 1.
+ * solution: I took off the + 1.
+ *
+ * FUTURE IMPROVEMENT: deleteAssociated part could just have the part passed into it and then call the remove
+ * function on it.
+ */
 public class Product {
     private ObservableList<Part> parts = FXCollections.observableArrayList();
     private int id;
@@ -15,12 +25,12 @@ public class Product {
 
     /**
      *
-     * @param id int value
-     * @param name string value
-     * @param price double value
-     * @param stock int value
-     * @param min int value
-     * @param max int value
+     * @param id int value product Id
+     * @param name string value name of the product
+     * @param price double value price of the product
+     * @param stock int value amount of product on hand
+     * @param min int value minimum number of products to bbe on hand
+     * @param max int value maximum number of products to have on hand
      */
     public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
@@ -32,7 +42,7 @@ public class Product {
     }
 
     /**
-     * @return The part instance Id
+     * @return The product Id
      */
     public int getId() {
         return id;
@@ -46,7 +56,7 @@ public class Product {
     }
 
     /**
-     * @return the name of the product instance
+     * @return the name of the product
      */
     public String getName() {
         return name;
@@ -60,7 +70,7 @@ public class Product {
     }
 
     /**
-     * @return the price of the product instance
+     * @return the price of the product
      */
     public double getPrice() {
         return price;
@@ -74,7 +84,7 @@ public class Product {
     }
 
     /**
-     * @return the stock of the product instance
+     * @return the stock of the product
      */
     public int getStock() {
         return stock;
@@ -88,7 +98,7 @@ public class Product {
     }
 
     /**
-     * @return the min of the product instance
+     * @return the min of the product
      */
     public int getMin() {
         return min;
@@ -102,7 +112,7 @@ public class Product {
     }
 
     /**
-     * @return the max of the product instance
+     * @return the max of the product
      */
     public int getMax() {
         return max;

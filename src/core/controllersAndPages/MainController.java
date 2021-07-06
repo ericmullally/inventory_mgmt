@@ -26,6 +26,11 @@ import java.io.IOException;
 
 /**
  * controls the main page of the application.
+ *
+ * RUNTIME ERROR: Could not get the part or product table to populate the integer values.
+ * solution. about 30 minutes of searching and i found that i needed to set the simple integer property as objects.
+ *
+ * FUTURE IMPROVEMENT: The save button should send a copy of the inventory to a database to save it.
  */
 public class MainController {
 

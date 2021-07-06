@@ -2,7 +2,13 @@ package core.classes;
 
 /**
  * Extends Part class.
+ * Part That is made by the company has a machine Id instead of company name.
  *
+ * RUNTIME ERROR: Location: constructor.  Error when trying to create a new instance.
+ * I forgot to call super and pass params.
+ *
+ * FUTURE IMPROVEMENT: Add more details about the part. add a list of products its associated with,
+ * so that if it was deleted, it could be removed from them as well.
  *
  */
 

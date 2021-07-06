@@ -1,6 +1,15 @@
 package core.classes;
-// needs to be static
 
+/**
+ * extends the part class.
+ * comes from another company, has a company name instead of machine Id.
+ *
+ * RUNTIME ERROR: Could not invoke getCompanyName.
+ * Solution: I spelled it correctly.
+ *
+ * FUTURE IMPROVEMENT: Add more details about the part. add a list of products its associated with,
+ * so that if it was deleted, it could be removed from them as well.
+ */
 public class Outsourced extends Part{
 
     String companyName = "";
@@ -21,10 +30,18 @@ public class Outsourced extends Part{
 
     }
 
+    /**
+     *
+     * @param name to set.
+     */
     public void setCompanyName(String name){
         this.companyName = name;
     }
 
+    /**
+     *
+     * @return the company name
+     */
     public String getCompanyName (){
         return this.companyName;
     }
