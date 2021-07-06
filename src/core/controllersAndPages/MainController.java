@@ -346,7 +346,22 @@ public class MainController {
            noSelectionError.initModality(Modality.APPLICATION_MODAL);
            noSelectionError.show();
            return;
-       }else{
+       }else if(productToRemove.getAllAssociatedParts().size() >0){
+           Alert associatedPartAlert = new Alert(Alert.AlertType.ERROR);
+           associatedPartAlert.setHeaderText("Associated Part");
+           associatedPartAlert.setContentText(String.format("The product %s has an associated part. \n Please remove all associated parts before deleting", productToRemove.getName()));
+           associatedPartAlert.initModality(Modality.APPLICATION_MODAL);
+           associatedPartAlert.show();
+           return;
+       }else {
+           if(productToRemove.getAllAssociatedParts().size()>0){
+               Alert associatedPartAlert = new Alert(Alert.AlertType.ERROR);
+               associatedPartAlert.setHeaderText("Associated Part");
+               associatedPartAlert.setContentText(String.format("The product %s has an associated part. \n Please remove all associated parts before deleting", productToRemove.getName()));
+               associatedPartAlert.initModality(Modality.APPLICATION_MODAL);
+               associatedPartAlert.show();
+               return;
+           }
            Alert conformation = new Alert(Alert.AlertType.CONFIRMATION);
            conformation.setHeaderText("Confirmation");
            conformation.setContentText(String.format("Are you sure you want to delete Product: %d ?", productToRemove.getId()));
