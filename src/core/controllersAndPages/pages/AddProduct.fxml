@@ -58,7 +58,7 @@
                   <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <TextField id="add_product_search_field" maxWidth="200.0" minWidth="100.0" promptText="Serach by Product ID or Name" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <TextField id="add_product_search_field" fx:id="add_Product_part_search" maxWidth="200.0" minWidth="100.0" promptText="Serach by Product ID or Name" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

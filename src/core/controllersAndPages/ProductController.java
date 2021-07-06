@@ -35,12 +35,12 @@ import java.text.MessageFormat;
 public class ProductController {
     private Inventory inventory;
     private ObservableList<Part> partsToAdd = FXCollections.observableArrayList();
-
     int Id = -1;
+    boolean isEdit;
 
     @FXML
     private TextField  add_product_id_field, add_product_name_field, add_product_inventory_field, add_product_price_field,
-            add_product_max_field, add_product_min_field;
+            add_product_max_field, add_product_min_field, add_Product_part_search;
 
     @FXML
     private Button add_product_save_btn, add_product_cancel_btn;
@@ -68,17 +68,30 @@ public class ProductController {
     public void initialize(Inventory inventory){
         this.inventory = inventory;
         this.Id = inventory.getAllProducts().size() + 1;
+        this.isEdit = false;
         add_product_id_field.setText(String.valueOf(this.Id));
         add_product_parts_selection_table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        populateSelectionTable();
+        setUpSearchBoxes();
+        populateSelectionTable(inventory.getAllParts());
     }
 
+    /**
+     *
+     * @param inventory inventory object to add the product to
+     * @param id id of the product to edit.
+     */
+    @FXML
     public void initialize(Inventory inventory, int id){
         this.inventory = inventory;
         this.Id = id;
+        this.isEdit = true;
+        setUpSearchBoxes();
         add_product_id_field.setText(String.valueOf(this.Id));
         add_product_parts_selection_table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        populateSelectionTable();
+        populateSelectionTable(inventory.getAllParts());
+        partsToAdd = inventory.lookUpProduct(id).getAllAssociatedParts();
+        populateAssociatedParts();
+        populateData();
     }
 
     /**
@@ -90,31 +103,10 @@ public class ProductController {
      */
     @FXML
     private void onSaveProductClick (ActionEvent actionEvent) throws IOException {
-        boolean isComplete= checkFields();
-        boolean isValid =  checkValidInput();
-
-        if(isComplete && isValid){
-            String name = add_product_name_field.getText();
-            int inv = Integer.parseInt(add_product_inventory_field.getText().strip());
-            double price = Double.parseDouble(add_product_price_field.getText().strip());
-            int max = Integer.parseInt(add_product_max_field.getText().strip());
-            int min = Integer.parseInt(add_product_min_field.getText().strip());
-
-            Product newProduct = new Product(this.Id, name, price, inv,  max, min );
-            partsToAdd.forEach(part->{ newProduct.addAssociatedPart(part); });
-            this.inventory.addProduct(newProduct);
-
-            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
-            Parent root = mainLoader.load();
-            MainController mainController = mainLoader.getController();
-            mainController.initialize(this.inventory);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Inventory Management System");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
-
-            Stage currentStage = (Stage) add_product_save_btn.getScene().getWindow();
-            currentStage.close();
+        if(isEdit){
+            saveEditedProduct();
+        }else{
+            saveNewProduct();
         }
 
     }
@@ -313,12 +305,12 @@ public class ProductController {
     /**
      * fills the parts selection table.
      */
-    private void populateSelectionTable(){
+    private void populateSelectionTable(ObservableList list){
         part_selection_id.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
         part_selection_name.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         part_selection_inventory.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
         part_selection_price.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
-        add_product_parts_selection_table.setItems(inventory.getAllParts());
+        add_product_parts_selection_table.setItems(list);
     }
 
     /**
@@ -330,6 +322,128 @@ public class ProductController {
         associated_part_inventory.setCellValueFactory(data-> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
         associated_part_price.setCellValueFactory(data-> new SimpleDoubleProperty(data.getValue().getPrice()).asObject());
         add_product_associated_parts_table.setItems(this.partsToAdd);
+    }
+
+    /**
+     * populates data for existing product
+     */
+    private void populateData(){
+        Product product = inventory.lookUpProduct(Id);
+        add_product_name_field.setText(product.getName());
+        add_product_price_field.setText(String.valueOf(product.getPrice()));
+        add_product_inventory_field.setText(String.valueOf(product.getStock()));
+        add_product_max_field.setText(String.valueOf(product.getMax()));
+        add_product_min_field.setText(String.valueOf(product.getMin()));
+    }
+
+    /**
+     * @throws IOException
+     * saves a new part to the inventory and redirects to the main page.
+     */
+    private void saveNewProduct() throws IOException {
+        boolean isComplete= checkFields();
+        boolean isValid =  checkValidInput();
+
+        if(isComplete && isValid){
+            String name = add_product_name_field.getText();
+            int inv = Integer.parseInt(add_product_inventory_field.getText().strip());
+            double price = Double.parseDouble(add_product_price_field.getText().strip());
+            int max = Integer.parseInt(add_product_max_field.getText().strip());
+            int min = Integer.parseInt(add_product_min_field.getText().strip());
+
+            Product newProduct = new Product(this.Id, name, price, inv, min, max );
+            partsToAdd.forEach(part->{ newProduct.addAssociatedPart(part); });
+            this.inventory.addProduct(newProduct);
+
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+            Parent root = mainLoader.load();
+            MainController mainController = mainLoader.getController();
+            mainController.initialize(this.inventory);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Inventory Management System");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+
+            Stage currentStage = (Stage) add_product_save_btn.getScene().getWindow();
+            currentStage.close();
+        }
+
+    }
+
+    /**
+     * @throws IOException
+     * Saves the product with new values.
+     */
+    private void saveEditedProduct() throws IOException{
+        boolean isComplete= checkFields();
+        boolean isValid =  checkValidInput();
+
+        if(isComplete && isValid){
+            String name = add_product_name_field.getText();
+            int inv = Integer.parseInt(add_product_inventory_field.getText());
+            Double price = Double.parseDouble(add_product_price_field.getText());
+            int min = Integer.parseInt(add_product_min_field.getText());
+            int max = Integer.parseInt(add_product_max_field.getText());
+            Product productToEdit = inventory.lookUpProduct(Id);
+            productToEdit.setName(name);
+            productToEdit.setStock(inv);
+            productToEdit.setPrice(price);
+            productToEdit.setMin(min);
+            productToEdit.setMax(max);
+            ObservableList<Part> allAssociatedParts = productToEdit.getAllAssociatedParts();
+            for(Part part: partsToAdd){
+                if(allAssociatedParts.contains(part)){
+                    continue;
+                }else{
+                    productToEdit.deleteAssociatedPart(part.getId());
+                }
+            }
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
+            Parent root = mainLoader.load();
+            MainController mainController = mainLoader.getController();
+            mainController.initialize(this.inventory);
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Inventory Management System");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+
+            Stage currentStage = (Stage) add_product_save_btn.getScene().getWindow();
+            currentStage.close();
+
+        }
+
+    }
+
+    /**
+     * adds Listener to the available parts search box
+     */
+    private void setUpSearchBoxes(){
+        add_Product_part_search.textProperty().addListener(( observableValue, oldVal, newVal)->{
+
+            ObservableList<Part> toDisplay = FXCollections.observableArrayList();
+
+            if(newVal.isEmpty()){
+                toDisplay = inventory.getAllParts();
+            }else{
+                try{
+                    int partId = Integer.parseInt(newVal);
+                    toDisplay.add(inventory.lookUpPart(partId));
+                }catch(Exception ex){
+                    toDisplay = inventory.lookUpPart(newVal);
+                }
+            }
+            if(toDisplay.isEmpty()){
+                Alert noPartFound = new Alert(Alert.AlertType.ERROR);
+                noPartFound.setHeaderText("Part Not Found");
+                noPartFound.setContentText(String.format("No parts match %s", newVal));
+                noPartFound.initModality(Modality.APPLICATION_MODAL);
+                noPartFound.show();
+                return;
+            }else{
+                populateSelectionTable(toDisplay);
+            }
+
+        });
     }
 
 }

@@ -363,6 +363,20 @@ public class PartController {
                             errorMsg.show();
                             return false;
                         }
+                    }else{
+                        if(Character.isDigit(field.getText().charAt(0))){
+                            Alert intForName = new Alert(Alert.AlertType.CONFIRMATION);
+                            intForName.setHeaderText("Company name Conformation");
+                            intForName.setContentText("The company name Begins with a digit. \n Do you wish to continue?");
+                            intForName.initModality(Modality.APPLICATION_MODAL);
+                            intForName.showAndWait();
+                            Boolean response = intForName.getResult().getButtonData().isDefaultButton();
+                            if(response){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }
                     }
                     break;
 
