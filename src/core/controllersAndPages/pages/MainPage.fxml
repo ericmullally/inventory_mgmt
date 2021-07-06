@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="484.0" prefWidth="962.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.MainController">
+<VBox prefHeight="484.0" prefWidth="962.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllersAndPages.MainController">
    <children>
       <GridPane id="MainPage" prefHeight="486.0" prefWidth="962.0">
         <columnConstraints>
@@ -45,7 +45,7 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField id="parts_search_field" fx:id="part_search_box"  promptText="Search by Part ID or Name" GridPane.columnIndex="2" GridPane.columnSpan="2">
+                  <TextField id="parts_search_field" fx:id="part_search_box" promptText="Search by Part ID or Name" GridPane.columnIndex="2" GridPane.columnSpan="2">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
@@ -117,7 +117,7 @@
                   <Button id="products_delete_btn" fx:id="product_delete_btn" alignment="CENTER" mnemonicParsing="false" onAction="#onDeleteProductClick" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                </children>
             </GridPane>
-            <Button id="main_exit_btn" fx:id="main_exit_btn" mnemonicParsing="false" prefHeight="22.0" prefWidth="111.0" text="Exit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+            <Button id="main_exit_btn" fx:id="main_exit_btn" mnemonicParsing="false" onAction="#onExitClick" prefHeight="22.0" prefWidth="111.0" text="Exit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

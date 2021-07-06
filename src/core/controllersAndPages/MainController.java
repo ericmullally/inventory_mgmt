@@ -23,22 +23,16 @@ import javafx.util.FXPermission;
 
 import java.io.IOException;
 
+
 /**
  * controls the main page of the application.
- *
- *
- *
  */
 public class MainController {
-    /**
-     * todo section
-     * part double value needs two decimal places
-     */
 
     private Inventory inventory;
 
     @FXML
-    private Button main_add_part_btn, product_add_btn;
+    private Button main_add_part_btn, product_add_btn, main_exit_btn;
 
     @FXML
     private TextField part_search_box, product_search_box;
@@ -367,6 +361,22 @@ public class MainController {
            }
            populateProducts(inventory.getAllProducts());
        }
+    }
+
+    public void onExitClick(){
+       Stage mainWindow = (Stage) main_exit_btn.getScene().getWindow();
+       Alert conformation = new Alert(Alert.AlertType.CONFIRMATION);
+       conformation.setHeaderText("Exit Application");
+       conformation.setContentText("Are you sure you wish to Exit?");
+       conformation.initModality(Modality.APPLICATION_MODAL);
+       conformation.showAndWait();
+       Boolean response = conformation.getResult().getButtonData().isDefaultButton();
+       if(response){
+           mainWindow.close();
+       }else{
+           return;
+        }
+
     }
 
 

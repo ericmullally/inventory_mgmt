@@ -14,16 +14,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
 import java.io.IOException;
 import java.text.MessageFormat;
 
 /**
  * controller for the parts page.
  *
- * RUNTIME ERROR: after adding the edit functionality I wrote the new editpart function with a foreach statement
- * to check for the matching part and use the setter functions. however I put the if isComplete && isValid check inside the foreach.
+ * RUNTIME ERROR: after adding the edit functionality I wrote the new edit part function with a foreach statement
+ * to check for the matching part and use the setter functions. however I put the if isComplete and isValid check inside the foreach.
  * this cause the program to redirect to the main page if the form was not filled out correctly.
  *
  * SOLUTION: I moved the if isComplete and isValid check to wrap the for each statement and save functionality.
@@ -51,6 +49,7 @@ public class PartController {
     private Button add_part_save_btn, add_part_cancel_btn;
 
     /**
+     * @param inventory sets the edited inventory.
      * Sets toggle buttonGroup, and adds event listener.
      * creates part Id.
      */
@@ -144,7 +143,7 @@ public class PartController {
 
     /**
      * @throws IOException
-     * Creates new part class outsourced or inhouse depending on current selection.
+     * Creates new part class outsourced or inHouse depending on current selection.
      * Creates new main page and gives it the new inventory object with the new part.
      */
     private void createNewPart() throws IOException{
@@ -193,38 +192,26 @@ public class PartController {
 
         if(isComplete && isValid){
             String name = add_part_name_field.getText();
+            String machineIdOrName = add_part_id_or_company_field.getText();
             int inv = Integer.parseInt(add_part_inv_field.getText().strip());
             double price = Double.parseDouble(add_part_price_field.getText().strip());
             int max = Integer.parseInt(add_part_max_field.getText().strip());
             int min = Integer.parseInt(add_part_min_field.getText().strip());
 
-            inventory.getAllParts().forEach(item ->{
-                if(item.getId() == Id){
-                    if((in_house_btn.isSelected() && item instanceof InHouse) ||
-                            (outsourced_btn.isSelected() && item instanceof Outsourced)){
-                        item.setName(name);
-                        item.setStock(inv);
-                        item.setPrice(price);
-                        item.setMax(max);
-                        item.setMin(min);
-                        updateInProduct(item);
+
+            for(int i =0; i < inventory.getAllParts().size(); i++){
+                if(inventory.getAllParts().get(i).getId() == Id ){
+                    Part newPart;
+                    if(outsourced_btn.isSelected()){
+                        newPart = new Outsourced(Id,name, price,inv, min, max, machineIdOrName );
                     }else{
-                        inventory.deletePart(item);
-                        Part newPart;
-                        if(in_house_btn.isSelected()){
-                            int machineId = Integer.parseInt( add_part_id_or_company_field.getText().strip());
-                            newPart = new InHouse(Id, name,price, inv, min, max, machineId);
-                        }else{
-                            String companyName = add_part_id_or_company_field.getText();
-                            newPart = new Outsourced(Id, name,price, inv, min,max, companyName);
-                        }
-                        inventory.addPart(newPart);
-                        updateInProduct(newPart);
+                        int machineId = Integer.parseInt(machineIdOrName);
+                        newPart = new InHouse(Id,name, price,inv, min, max, machineId );
                     }
-
+                    inventory.updatePart(i,newPart);
+                    updateInProduct(newPart);
                 }
-
-            });
+            }
 
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("pages/MainPage.fxml"));
             Parent root = mainLoader.load();
@@ -371,11 +358,7 @@ public class PartController {
                             intForName.initModality(Modality.APPLICATION_MODAL);
                             intForName.showAndWait();
                             Boolean response = intForName.getResult().getButtonData().isDefaultButton();
-                            if(response){
-                                return true;
-                            }else{
-                                return false;
-                            }
+                            return response;
                         }
                     }
                     break;

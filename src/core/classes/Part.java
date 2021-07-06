@@ -12,7 +12,7 @@ public abstract class Part {
     private double price;
     private int stock;
     private int min;
-    private int max;    
+    private int max;
     public Part(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
